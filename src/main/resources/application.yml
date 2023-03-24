@@ -1,0 +1,11 @@
+server:
+    port: 8080
+    servlet:
+        context-path: /api
+
+spring:
+    neo4j:
+        uri: neo4j://localhost:7687
+        authentication:
+            username: neo4j
+            password: mysupersecret

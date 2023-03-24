@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  familia-neo4j:
+    image: neo4j:5.5.0-community
+    restart: always
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./neo4j/conf:/conf
+      - ./neo4j/data:/data
+#      - ./neo4j/import:/import
+#      - ./neo4j/logs:/logs
+#      - ./neo4j/plugins:/plugins
+    environment:
+      NEO4J_AUTH: neo4j/mysupersecret
+
+
+#  familia-backend:
+#    image: familia:latest
+#    restart: always
+#    ports:
+#      - 8080:8080
