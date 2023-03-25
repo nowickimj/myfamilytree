@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   familia-neo4j:
+    container_name: familia-neo4j
     image: neo4j:5.5.0-community
     restart: always
     ports:

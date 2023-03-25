@@ -1,7 +1,7 @@
-package net.mnowicki.familia.person;
+package net.mnowicki.familia.domain.person;
 
-import net.mnowicki.familia.person.dto.CreatePersonDto;
-import net.mnowicki.familia.person.dto.PersonDto;
+import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
+import net.mnowicki.familia.domain.person.dto.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/person")
+@RequestMapping(path = "/persons")
 public class PersonController {
 
     private final PersonService personService;
@@ -28,4 +28,5 @@ public class PersonController {
     PersonDto create(@RequestBody @Validated CreatePersonDto dto) {
         return personService.create(dto);
     }
+
 }

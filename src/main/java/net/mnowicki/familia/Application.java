@@ -6,10 +6,10 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 @EnableNeo4jRepositories(basePackages = "net.mnowicki.familia.model.graph.repositories")
 @SpringBootApplication
-public class FamiliaApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FamiliaApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 }

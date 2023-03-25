@@ -1,9 +1,9 @@
-package net.mnowicki.familia.person;
+package net.mnowicki.familia.domain.person;
 
+import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
+import net.mnowicki.familia.domain.person.dto.PersonDto;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
 import net.mnowicki.familia.model.graph.repositories.PersonRepository;
-import net.mnowicki.familia.person.dto.CreatePersonDto;
-import net.mnowicki.familia.person.dto.PersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

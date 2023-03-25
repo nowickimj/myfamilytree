@@ -1,4 +1,4 @@
-package net.mnowicki.familia.person.dto;
+package net.mnowicki.familia.domain.person.dto;
 
 import lombok.Builder;
 import net.mnowicki.familia.model.Gender;
