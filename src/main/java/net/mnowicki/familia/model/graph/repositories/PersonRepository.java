@@ -1,26 +1,18 @@
 package net.mnowicki.familia.model.graph.repositories;
 
-import net.mnowicki.familia.exception.NodeNotFoundException;
+import net.mnowicki.familia.model.graph.base.BaseNodeRepository;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface PersonRepository extends Neo4jRepository<PersonNode, Long> {
+public interface PersonRepository extends BaseNodeRepository<PersonNode> {
 
-    default PersonNode findOrThrow(long id) {
-        return findById(id).orElseThrow(() -> new NodeNotFoundException(id));
-    }
-
-    @Query("OPTIONAL MATCH (p:Person)--(f:Family)--(c:Person) " +
-            "WHERE ID(p) = $parentId AND ID(c) = $childId " +
-            "RETURN f IS NOT NULL AS Predicate")
-    boolean hasRelationship(@Param("parentId") long parentId, @Param("childId") Long childId);
-
-    @Query("MATCH (p:Person)-[r1:PARENT]->(f:Family)-[r2:CHILD]->(c:Person) " +
-            "WHERE ID(p) = $parentId AND ID(c) = $childId " +
-            "RETURN f IS NOT NULL AS Predicate")
-    boolean isParent(@Param("parentId") long parentId, @Param("childId") Long childId);
+    @Query("MATCH (c:Person)<-[r1:CHILD]-(f:Family)<-[r2:PARENT]<-(p:Person) " +
+            "WHERE ID(c) = $childId " +
+            "RETURN p")
+    List<PersonNode> findParents(@Param("childId") Long childId);
 }

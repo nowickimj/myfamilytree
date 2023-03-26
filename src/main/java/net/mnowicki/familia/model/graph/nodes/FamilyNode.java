@@ -2,9 +2,9 @@ package net.mnowicki.familia.model.graph.nodes;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.mnowicki.familia.model.RelationshipType;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
+import net.mnowicki.familia.model.graph.base.BaseNode;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
@@ -12,12 +12,9 @@ import java.util.List;
 
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @Node("Family")
-public class FamilyNode {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+public class FamilyNode extends BaseNode {
 
     @Relationship(type = RelationshipType.PARENT_STRING, direction = Relationship.Direction.INCOMING)
     private List<PersonNode> parents;

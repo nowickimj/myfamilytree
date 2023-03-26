@@ -1,5 +1,6 @@
 package net.mnowicki.familia.domain.person;
 
+import net.mnowicki.familia.domain.NodeConverter;
 import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
 import net.mnowicki.familia.domain.person.dto.PersonDto;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
@@ -13,15 +14,17 @@ import java.util.List;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final NodeConverter converter;
 
     @Autowired
-    public PersonService(PersonRepository personRepository) {
+    public PersonService(PersonRepository personRepository, NodeConverter converter) {
         this.personRepository = personRepository;
+        this.converter = converter;
     }
 
     public List<PersonDto> findAll() {
         return personRepository.findAll().stream()
-                .map(this::toDto)
+                .map(converter::toPersonDto)
                 .toList();
     }
 
@@ -34,17 +37,11 @@ public class PersonService {
                 .gender(createPersonDto.gender())
                 .build());
 
-        return toDto(node);
+        return converter.toPersonDto(node);
     }
 
-    public PersonDto toDto(PersonNode node) {
-        return PersonDto.builder()
-                .id(node.getId())
-                .firstName(node.getFirstName())
-                .lastName(node.getLastName())
-                .dateOfBirth(node.getDateOfBirth())
-                .dateOfDeath(node.getDateOfDeath())
-                .gender(node.getGender())
-                .build();
+    public void deleteById(long id) {
+        //TODO: make sure all related nodes are checked
+        personRepository.deleteExistingById(id);
     }
 }
