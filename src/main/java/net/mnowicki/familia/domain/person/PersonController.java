@@ -42,12 +42,12 @@ public class PersonController {
     }
 
     @PostMapping("/{id}/partners/{partnerId}")
-    public FamilyDto addPartner(@NotNull @PathVariable("{id}") long partnerId1, @NotNull @PathVariable("partnerId") long partnerId2) {
+    public FamilyDto addPartner(@NotNull @PathVariable("id") long partnerId1, @NotNull @PathVariable("partnerId") long partnerId2) {
         return familyService.addPartner(partnerId1, partnerId2);
     }
 
     @PostMapping("/{id}/children/{childId}")
-    public FamilyDto addChild(@NotNull @PathVariable("{id}") long parentId, @NotNull @PathVariable("childId") long childId) {
+    public FamilyDto addChild(@NotNull @PathVariable("id") long parentId, @NotNull @PathVariable("childId") long childId) {
         return familyService.addChildToPerson(parentId, childId);
     }
 

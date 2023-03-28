@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +22,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler({FamilyCreationException.class})
-    public <E extends NotFoundException> ResponseEntity<ErrorApiResponse> handleBadRequest(final HttpServletRequest request, final E e) {
+    public <E extends RuntimeException> ResponseEntity<ErrorApiResponse> handleBadRequest(final HttpServletRequest request, final E e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(buildErrorResponse(e.getMessage(), request.getRequestURI()));
     }
