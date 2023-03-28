@@ -28,6 +28,11 @@ public class PersonService {
                 .toList();
     }
 
+    public PersonDto findById(long id) {
+        var node = personRepository.findOrThrow(id);
+        return converter.toPersonDto(node);
+    }
+
     public PersonDto create(CreatePersonDto createPersonDto) {
         var node = personRepository.save(PersonNode.builder()
                 .firstName(createPersonDto.firstName())

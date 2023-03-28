@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends BaseNodeRepository<PersonNode> {
@@ -15,4 +16,5 @@ public interface PersonRepository extends BaseNodeRepository<PersonNode> {
             "WHERE ID(c) = $childId " +
             "RETURN p")
     List<PersonNode> findParents(@Param("childId") Long childId);
+
 }

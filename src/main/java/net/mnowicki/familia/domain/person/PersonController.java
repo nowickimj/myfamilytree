@@ -31,23 +31,28 @@ public class PersonController {
         return personService.findAll();
     }
 
+    @GetMapping("/{id}")
+    PersonDto getById(@NonNull @PathVariable("id") long id) {
+        return personService.findById(id);
+    }
+
     @PostMapping
     PersonDto create(@RequestBody @Validated CreatePersonDto dto) {
         return personService.create(dto);
     }
 
     @PostMapping("/{id}/partners/{partnerId}")
-    public FamilyDto addPartner(@NotNull @PathVariable("{id}") long partnerId1, @NotNull @PathVariable("partnerId") Long partnerId2) {
+    public FamilyDto addPartner(@NotNull @PathVariable("{id}") long partnerId1, @NotNull @PathVariable("partnerId") long partnerId2) {
         return familyService.addPartner(partnerId1, partnerId2);
     }
 
     @PostMapping("/{id}/children/{childId}")
-    public FamilyDto addChild(@NotNull @PathVariable("{id}") long parentId, @NotNull @PathVariable("childId") Long childId) {
+    public FamilyDto addChild(@NotNull @PathVariable("{id}") long parentId, @NotNull @PathVariable("childId") long childId) {
         return familyService.addChild(parentId, childId);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> delete(@NonNull @PathVariable("id") Long id) {
+    ResponseEntity<Void> deleteExistingById(@NonNull @PathVariable("id") long id) {
         personService.deleteExistingById(id);
         return ResponseEntity.accepted().build();
     }

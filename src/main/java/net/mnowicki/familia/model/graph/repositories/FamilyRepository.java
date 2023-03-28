@@ -23,14 +23,12 @@ public interface FamilyRepository extends BaseNodeRepository<FamilyNode> {
 
     @Query("MATCH (p:Person)<-[r1:CHILD]-(f:Family)<-[r2:PARENT]-() " +
             "WHERE ID(p) = $personId " +
-            "RETURN f, collect(r1), collect(r2)")
+            "RETURN f")
     Optional<FamilyNode> findAscendingFamily(@Param("personId") long personId);
-
-
 
     @Query("MATCH (p1:Person)-[r1:PARENT]->(f:Family)<-[r2:PARENT]-(p2:Person) " +
             "WHERE ID(p1) = $personId1 AND ID(p2) = $personId2 " +
-            "RETURN f, collect(r1), collect(r2)")
+            "RETURN f")
     Optional<FamilyNode> findPartnersFamily(@Param("personId1") long personId1, @Param("personId2") Long personId2);
 
     @Query("MATCH (p1:Person)--(f:Family)--(p2:Person) " +

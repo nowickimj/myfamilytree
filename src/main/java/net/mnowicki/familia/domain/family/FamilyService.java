@@ -115,7 +115,7 @@ public class FamilyService {
             var foundParents = personRepository.findParents(child.getId());
             foundParents.removeAll(expectedParents);
             if (foundParents.size() != 0) {
-                List<Long> foundParentsIds = foundParents.stream().map(BaseNode::getId).toList();
+                List<Long> foundParentsIds = foundParents.stream().map(PersonNode::getId).toList();
                 throw new FamilyCreationException(String.format("Unexpected parents [%s] found for child %s", foundParentsIds, child.idAsString()));
             }
         });
