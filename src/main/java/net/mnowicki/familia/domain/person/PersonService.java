@@ -40,7 +40,7 @@ public class PersonService {
         return converter.toPersonDto(node);
     }
 
-    public void deleteById(long id) {
+    public void deleteExistingById(long id) {
         //TODO: make sure all related nodes are checked
         personRepository.deleteExistingById(id);
     }

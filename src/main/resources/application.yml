@@ -13,3 +13,7 @@ spring:
         authentication:
             username: neo4j
             password: mysupersecret
+
+springdoc:
+    swagger-ui:
+        path: /swagger.html

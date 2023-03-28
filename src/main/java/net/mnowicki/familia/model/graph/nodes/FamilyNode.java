@@ -8,19 +8,44 @@ import net.mnowicki.familia.model.graph.base.BaseNode;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.util.List;
+import java.util.*;
 
-@Data
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @Node("Family")
 public class FamilyNode extends BaseNode {
 
     @Relationship(type = RelationshipType.PARENT_STRING, direction = Relationship.Direction.INCOMING)
-    private List<PersonNode> parents;
+    private Set<PersonNode> parents;
 
     @Relationship(type = RelationshipType.CHILD_STRING, direction = Relationship.Direction.OUTGOING)
-    private List<PersonNode> children;
+    private Set<PersonNode> children;
+
+    public Set<PersonNode> getParents() {
+        if(parents == null) {
+            parents = new HashSet<>();
+        }
+        return parents;
+    }
+
+    public Set<PersonNode> getChildren() {
+        if(children == null) {
+            children = new HashSet<>();
+        }
+        return children;
+    }
+
+    public void addParent(PersonNode parent) {
+        getParents().add(parent);
+    }
+
+    public void addChild(PersonNode child) {
+        getChildren().add(child);
+    }
+
+    public void addChildren(List<PersonNode> children) {
+        getChildren().addAll(children);
+    }
 
     //TODO: add optimistic lock
     //@Version

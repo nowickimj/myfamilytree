@@ -11,27 +11,29 @@ import java.util.Optional;
 @Repository
 public interface FamilyRepository extends BaseNodeRepository<FamilyNode> {
 
-    @Query("OPTIONAL MATCH (p1:Person)--(f:Family)--(p2:Person) " +
+    @Query("MATCH (p1:Person)--(f:Family)--(p2:Person) " +
             "WHERE ID(p1) = $personId1 AND ID(p2) = $personId2 " +
             "RETURN f")
     Optional<FamilyNode> findContaining(@Param("personId1") long personId1, @Param("personId2") Long personId2);
 
-    @Query("OPTIONAL MATCH (p:Person)-[r:PARENT]->(f:Family) " +
+    @Query("MATCH (p:Person)-[r:PARENT]->(f:Family) " +
             "WHERE ID(p) = $personId " +
             "RETURN f")
     Optional<FamilyNode> findDescendingFamily(@Param("personId") long personId);
 
-    @Query("OPTIONAL MATCH (p:Person)<-[r:CHILD]-(f:Family) " +
+    @Query("MATCH (p:Person)<-[r1:CHILD]-(f:Family)<-[r2:PARENT]-() " +
             "WHERE ID(p) = $personId " +
-            "RETURN f")
+            "RETURN f, collect(r1), collect(r2)")
     Optional<FamilyNode> findAscendingFamily(@Param("personId") long personId);
 
-    @Query("OPTIONAL MATCH (p1:Person)-[r1:PARENT]->(f:Family)<-(r2:PARENT)-(p2:Person) " +
+
+
+    @Query("MATCH (p1:Person)-[r1:PARENT]->(f:Family)<-[r2:PARENT]-(p2:Person) " +
             "WHERE ID(p1) = $personId1 AND ID(p2) = $personId2 " +
-            "RETURN f")
+            "RETURN f, collect(r1), collect(r2)")
     Optional<FamilyNode> findPartnersFamily(@Param("personId1") long personId1, @Param("personId2") Long personId2);
 
-    @Query("OPTIONAL MATCH (p1:Person)--(f:Family)--(p2:Person) " +
+    @Query("MATCH (p1:Person)--(f:Family)--(p2:Person) " +
             "WHERE ID(p1) = $personId1 AND ID(p2) = $personId2 " +
             "RETURN f IS NOT NULL AS Predicate")
     boolean hasFamilyWith(@Param("personId1") long personId1, @Param("personId2") Long personId2);

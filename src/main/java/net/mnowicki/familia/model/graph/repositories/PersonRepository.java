@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface PersonRepository extends BaseNodeRepository<PersonNode> {
 
-    @Query("MATCH (c:Person)<-[r1:CHILD]-(f:Family)<-[r2:PARENT]<-(p:Person) " +
+    @Query("MATCH (c:Person)<-[r1:CHILD]-(f:Family)<-[r2:PARENT]-(p:Person) " +
             "WHERE ID(c) = $childId " +
             "RETURN p")
     List<PersonNode> findParents(@Param("childId") Long childId);

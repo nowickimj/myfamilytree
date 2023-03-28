@@ -4,6 +4,7 @@ import net.mnowicki.familia.domain.family.dto.CreateFamilyDto;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,6 +40,12 @@ public class FamilyController {
     @PostMapping("/{familyId}/parents/{parentId}")
     public ResponseEntity<Void> addParentToFamily(@NotNull @PathVariable("familyId") long familyId, @NotNull @PathVariable("parentId") Long parentId) {
         familyService.addParentToFamily(familyId, parentId);
+        return ResponseEntity.accepted().build();
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> delete(@NonNull @PathVariable("id") Long id) {
+        familyService.deleteExistingById(id);
         return ResponseEntity.accepted().build();
     }
 

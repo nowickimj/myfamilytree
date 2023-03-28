@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class FamilyService {
@@ -32,6 +33,10 @@ public class FamilyService {
         return converter.toFamilyDto(node);
     }
 
+    public void deleteExistingById(long id) {
+        familyRepository.deleteExistingById(id);
+    }
+
     public FamilyDto createFamily(CreateFamilyDto dto) {
         int parentsCount = dto.parentsIds().size();
         if (parentsCount != 1 && parentsCount != 2) {
@@ -46,8 +51,8 @@ public class FamilyService {
                 : familyRepository.findDescendingFamily(parents.get(0).getId());
 
         var family = existingParentsFamily.orElseGet(() -> FamilyNode.builder().build());
-
-        family.getChildren().addAll(children);
+        parents.forEach(family::addParent);
+        family.addChildren(children);
         familyRepository.save(family);
         return converter.toFamilyDto(family);
     }
@@ -58,7 +63,7 @@ public class FamilyService {
         assertNoRelationshipExists(person1, person2);
 
         var family = FamilyNode.builder()
-                .parents(List.of(person1, person2))
+                .parents(Set.of(person1, person2))
                 .build();
         familyRepository.save(family);
         return converter.toFamilyDto(family);
@@ -73,11 +78,11 @@ public class FamilyService {
                     if (existingFamily.getParents().size() > 1) {
                         throw new FamilyCreationException("Person with id %s has already been assigned a maximum number of parents.", Long.toString(childId));
                     }
-                    existingFamily.getParents().add(parent);
+                    existingFamily.addParent(parent);
                     return existingFamily;
                 }).orElseGet(() -> FamilyNode.builder()
-                        .parents(List.of(parent))
-                        .children(List.of(child))
+                        .parents(Set.of(parent))
+                        .children(Set.of(child))
                         .build());
 
         familyRepository.save(family);
@@ -91,7 +96,7 @@ public class FamilyService {
 
         var child = personRepository.findOrThrow(childId);
         var family = familyRepository.findOrThrow(familyId);
-        family.getChildren().add(child);
+        family.addChild(child);
         familyRepository.save(family);
     }
 
@@ -101,7 +106,7 @@ public class FamilyService {
             throw new FamilyCreationException("Maximum number of parents already assigned to family.");
         }
         var parent = personRepository.findOrThrow(parentId);
-        family.getParents().add(parent);
+        family.addParent(parent);
         familyRepository.save(family);
     }
 
