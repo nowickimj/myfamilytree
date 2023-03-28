@@ -21,9 +21,9 @@ public interface FamilyRepository extends BaseNodeRepository<FamilyNode> {
             "RETURN f")
     Optional<FamilyNode> findDescendingFamily(@Param("personId") long personId);
 
-    @Query("MATCH (p:Person)<-[r1:CHILD]-(f:Family)<-[r2:PARENT]-() " +
+    @Query("MATCH (p:Person)<-[r1:CHILD]-(f:Family) " +
             "WHERE ID(p) = $personId " +
-            "RETURN f")
+            "RETURN f LIMIT 1")
     Optional<FamilyNode> findAscendingFamily(@Param("personId") long personId);
 
     @Query("MATCH (p1:Person)-[r1:PARENT]->(f:Family)<-[r2:PARENT]-(p2:Person) " +

@@ -48,7 +48,7 @@ public class PersonController {
 
     @PostMapping("/{id}/children/{childId}")
     public FamilyDto addChild(@NotNull @PathVariable("{id}") long parentId, @NotNull @PathVariable("childId") long childId) {
-        return familyService.addChild(parentId, childId);
+        return familyService.addChildToPerson(parentId, childId);
     }
 
     @DeleteMapping("/{id}")

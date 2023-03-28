@@ -1,13 +1,11 @@
 package net.mnowicki.familia.domain.family;
 
-import net.mnowicki.familia.domain.family.dto.CreateFamilyDto;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -24,11 +22,6 @@ public class FamilyController {
     @GetMapping("/{id}")
     public FamilyDto findById(@NotNull @PathVariable("id") long id) {
         return familyService.findById(id);
-    }
-
-    @PostMapping
-    public FamilyDto create(@RequestBody @Valid CreateFamilyDto dto) {
-        return familyService.createFamily(dto);
     }
 
     @PostMapping("/{familyId}/children/{childId}")
