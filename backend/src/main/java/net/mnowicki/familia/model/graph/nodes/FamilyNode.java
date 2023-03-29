@@ -1,14 +1,15 @@
 package net.mnowicki.familia.model.graph.nodes;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.mnowicki.familia.model.RelationshipType;
 import net.mnowicki.familia.model.graph.base.BaseNode;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Builder
 @EqualsAndHashCode(callSuper = true)
@@ -22,14 +23,14 @@ public class FamilyNode extends BaseNode {
     private Set<PersonNode> children;
 
     public Set<PersonNode> getParents() {
-        if(parents == null) {
+        if (parents == null) {
             parents = new HashSet<>();
         }
         return parents;
     }
 
     public Set<PersonNode> getChildren() {
-        if(children == null) {
+        if (children == null) {
             children = new HashSet<>();
         }
         return children;
@@ -47,7 +48,4 @@ public class FamilyNode extends BaseNode {
         getChildren().addAll(children);
     }
 
-    //TODO: add optimistic lock
-    //@Version
-    //private Long version;
 }

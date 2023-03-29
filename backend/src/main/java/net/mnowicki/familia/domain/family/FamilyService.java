@@ -67,6 +67,7 @@ public class FamilyService {
         var child = personRepository.findOrThrow(childId);
         var family = familyRepository.findOrThrow(familyId);
         family.addChild(child);
+
         familyRepository.save(family);
     }
 
@@ -77,6 +78,7 @@ public class FamilyService {
         }
         var parent = personRepository.findOrThrow(parentId);
         family.addParent(parent);
+
         familyRepository.save(family);
     }
 

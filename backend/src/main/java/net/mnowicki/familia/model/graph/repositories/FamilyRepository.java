@@ -31,7 +31,7 @@ public interface FamilyRepository extends BaseNodeRepository<FamilyNode> {
             "RETURN f")
     Optional<FamilyNode> findPartnersFamily(@Param("personId1") long personId1, @Param("personId2") Long personId2);
 
-    @Query("MATCH (p1:Person)--(f:Family)--(p2:Person) " +
+    @Query("OPTIONAL MATCH (p1:Person)--(f:Family)--(p2:Person) " +
             "WHERE ID(p1) = $personId1 AND ID(p2) = $personId2 " +
             "RETURN f IS NOT NULL AS Predicate")
     boolean hasFamilyWith(@Param("personId1") long personId1, @Param("personId2") Long personId2);
