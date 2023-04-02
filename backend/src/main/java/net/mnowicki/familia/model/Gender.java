@@ -3,17 +3,17 @@ package net.mnowicki.familia.model;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Gender {
-    MALE(0),
-    FEMALE(1);
+    MALE("male"),
+    FEMALE("female");
 
-    private int jsonValue;
+    private String jsonValue;
 
-    Gender(int jsonValue) {
+    Gender(String jsonValue) {
         this.jsonValue = jsonValue;
     }
 
     @JsonValue
-    public int getJsonValue() {
+    public String getJsonValue() {
         return jsonValue;
     }
 }
