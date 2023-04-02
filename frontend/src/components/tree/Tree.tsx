@@ -7,10 +7,10 @@ import data from './example-family.json'
 
 
 export default function Tree(){
-    const [nodes] = useState(data as readonly Readonly<Node>[]);
-    const rootId = nodes[0].id
+    const [nodes] = useState(data as readonly Readonly<Node>[]); //TODO: replace with API call
+    const rootId = "2" //TODO: hardcoded, fix for calculated
 
-    return <>
+    return <div className="flex grid justify-items-center content-center mt-4 rounded-md px-8 py-4">
         <ReactFamilyTree
         nodes={nodes}
         rootId={rootId}
@@ -28,5 +28,5 @@ export default function Tree(){
             isRoot={node.id === rootId}
             onClick={event => {}} onSubClick={event => {}}/>
         )}
-    /></>;
+    /></div>;
 }
