@@ -13,6 +13,17 @@ spring:
         authentication:
             username: neo4j
             password: mysupersecret
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            authentication-database: familia
+            database: familia
+            username: backend
+            password: supersecret
+            auto-index-creation: true
+
+
 
 springdoc:
     swagger-ui:

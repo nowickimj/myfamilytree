@@ -1,5 +1,7 @@
 package net.mnowicki.familia.domain.tree;
 
+import net.mnowicki.familia.domain.ConfigurationService;
+import net.mnowicki.familia.domain.tree.dto.FamilyTreeDto;
 import net.mnowicki.familia.domain.tree.dto.FamilyTreeNodeDto;
 import net.mnowicki.familia.domain.tree.dto.FamilyTreeRootDto;
 import net.mnowicki.familia.model.graph.GraphDao;
@@ -13,9 +15,22 @@ import java.util.stream.Collectors;
 public class TreeService {
 
     private final GraphDao graphDao;
+    private final ConfigurationService configurationService;
 
-    public TreeService(GraphDao graphDao) {
+    public TreeService(GraphDao graphDao, ConfigurationService configurationService) {
         this.graphDao = graphDao;
+        this.configurationService = configurationService;
+    }
+
+    public FamilyTreeDto getTree() {
+        var rootId = configurationService.getTreeConfiguration()
+                .currentRootId();
+        var nodes = getFamilyTreeNodes();
+
+        return FamilyTreeDto.builder()
+                .rootId(Long.toString(rootId))
+                .nodes(nodes)
+                .build();
     }
 
     public Set<FamilyTreeRootDto> getFamilyTreeRoots() {

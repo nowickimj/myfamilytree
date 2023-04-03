@@ -1,5 +1,6 @@
 package net.mnowicki.familia.domain.tree;
 
+import net.mnowicki.familia.domain.tree.dto.FamilyTreeDto;
 import net.mnowicki.familia.domain.tree.dto.FamilyTreeNodeDto;
 import net.mnowicki.familia.domain.tree.dto.FamilyTreeRootDto;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,11 @@ public class TreeController {
 
     public TreeController(TreeService treeService) {
         this.treeService = treeService;
+    }
+
+    @GetMapping
+    public FamilyTreeDto getTree() {
+        return treeService.getTree();
     }
 
     @GetMapping("/roots")
