@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum RelationshipType {
 
     PARENT(RelationshipType.PARENT_STRING),
-    CHILD(RelationshipType.CHILD_STRING),
-    PARTNER(RelationshipType.PARTNER_STRING);
+    CHILD(RelationshipType.CHILD_STRING);
 
     private String jsonValue;
 

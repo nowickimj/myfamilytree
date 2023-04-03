@@ -1,6 +1,7 @@
 package net.mnowicki.familia.domain.tree;
 
 import net.mnowicki.familia.domain.tree.dto.FamilyTreeNodeDto;
+import net.mnowicki.familia.domain.tree.dto.FamilyTreeRootDto;
 import net.mnowicki.familia.model.graph.GraphDao;
 import net.mnowicki.familia.model.graph.projections.FamilyTreeNodeProjection;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,15 @@ public class TreeService {
 
     public TreeService(GraphDao graphDao) {
         this.graphDao = graphDao;
+    }
+
+    public Set<FamilyTreeRootDto> getFamilyTreeRoots() {
+        return graphDao.findTreeRoots().stream().map(result -> FamilyTreeRootDto.builder()
+                        .id(result.id())
+                        .firstName(result.firstName())
+                        .lastName(result.lastName())
+                        .build())
+                .collect(Collectors.toSet());
     }
 
     public Set<FamilyTreeNodeDto> getFamilyTreeNodes() {

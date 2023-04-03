@@ -2,20 +2,41 @@ package net.mnowicki.familia.model.graph;
 
 import net.mnowicki.familia.model.Gender;
 import net.mnowicki.familia.model.graph.projections.FamilyTreeNodeProjection;
+import net.mnowicki.familia.model.graph.projections.FamilyTreeRootProjection;
 import org.neo4j.driver.Value;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jClient;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class GraphDao {
 
-    @Autowired
-    Neo4jClient neo4jClient;
+    private final Neo4jClient neo4jClient;
+
+    public GraphDao(Neo4jClient neo4jClient) {
+        this.neo4jClient = neo4jClient;
+    }
+
+    public Set<FamilyTreeRootProjection> findTreeRoots() {
+        var queryResults = neo4jClient.query("""
+                        MATCH (p:Person)
+                            WHERE NOT EXISTS((p)<-[:CHILD]-(:Family))
+                            return ID(p) AS id, p.firstName AS firstName, p.lastName AS lastName
+                        """)
+                .fetchAs(FamilyTreeRootProjection.class)
+                .mappedBy(((typeSystem, record) -> FamilyTreeRootProjection.builder()
+                        .id(Long.toString(record.get("id").asLong()))
+                        .firstName(record.get("firstName").asString())
+                        .lastName(record.get("lastName").asString())
+                        .build()))
+                .all();
+
+        return new HashSet<>(queryResults);
+    }
 
     public Set<FamilyTreeNodeProjection> getFamilyTreeNodes() {
         var queryResults = neo4jClient.query("""
@@ -53,6 +74,5 @@ public class GraphDao {
                 .map(FamilyTreeNodeProjection.Relation::new)
                 .collect(Collectors.toSet());
     }
-
 
 }
