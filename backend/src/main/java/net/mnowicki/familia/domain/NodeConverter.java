@@ -13,6 +13,7 @@ public class NodeConverter {
         return PersonDto.builder()
                 .id(node.getId())
                 .firstName(node.getFirstName())
+                .middleName(node.getMiddleName())
                 .lastName(node.getLastName())
                 .dateOfBirth(node.getDateOfBirth())
                 .dateOfDeath(node.getDateOfDeath())

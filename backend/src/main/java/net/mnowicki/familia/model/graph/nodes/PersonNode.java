@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class PersonNode extends BaseNode {
 
     private String firstName;
+    private String middleName;
     private String lastName;
     private LocalDate dateOfBirth;
     private LocalDate dateOfDeath;

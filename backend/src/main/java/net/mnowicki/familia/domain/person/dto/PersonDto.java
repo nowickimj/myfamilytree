@@ -6,5 +6,5 @@ import net.mnowicki.familia.model.Gender;
 import java.time.LocalDate;
 
 @Builder
-public record PersonDto(long id, String firstName, String lastName, LocalDate dateOfBirth, LocalDate dateOfDeath, Gender gender) {
+public record PersonDto(long id, String firstName, String middleName, String lastName, LocalDate dateOfBirth, LocalDate dateOfDeath, Gender gender) {
 }

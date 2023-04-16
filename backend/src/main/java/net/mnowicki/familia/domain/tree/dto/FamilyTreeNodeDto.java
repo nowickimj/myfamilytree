@@ -5,10 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import net.mnowicki.familia.model.Gender;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Builder
-public record FamilyTreeNodeDto(String id, Gender gender, Set<RelationDto> parents, Set<RelationDto> children,
+public record FamilyTreeNodeDto(String id, Gender gender, String firstName, String middleName, String lastName, LocalDate dateOfBirth, LocalDate dateOfDeath,
+
+                                Set<RelationDto> parents, Set<RelationDto> children,
                                 Set<RelationDto> siblings, Set<RelationDto> spouses) {
 
     @Builder
