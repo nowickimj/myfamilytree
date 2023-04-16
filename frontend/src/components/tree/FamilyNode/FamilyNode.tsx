@@ -6,6 +6,7 @@ import {NodeDto} from "../const";
 
 interface FamilyNodeProps {
     node: NodeDto;
+    hasSubTree: boolean;
     isRoot: boolean;
     isHover?: boolean;
     onClick: (id: string) => void;
@@ -14,7 +15,7 @@ interface FamilyNodeProps {
 }
 
 export const FamilyNode = React.memo(
-    function FamilyNode({node, isRoot, isHover, onClick, onSubClick, style}: FamilyNodeProps) {
+    function FamilyNode({node, hasSubTree, isRoot, isHover, onClick, onSubClick, style}: FamilyNodeProps) {
         const clickHandler = useCallback(() => onClick(node.id), [node.id, onClick]);
         const clickSubHandler = useCallback(() => onSubClick(node.id), [node.id, onSubClick]);
 
@@ -34,15 +35,14 @@ export const FamilyNode = React.memo(
                         {formatName(node)}
                         <br/>
                         {formatDates(node)}
-
                     </div>
                 </div>
-                {/*{node.hasSubTree && (*/}
-                {/*  <div*/}
-                {/*    className={classNames(css.sub, css[node.gender])}*/}
-                {/*    onClick={clickSubHandler}*/}
-                {/*  />*/}
-                {/*)}*/}
+                {hasSubTree && (
+                  <div
+                    className={classNames(css.sub, css[node.gender])}
+                    onClick={clickSubHandler}
+                  />
+                )}
             </div>
         );
     },
