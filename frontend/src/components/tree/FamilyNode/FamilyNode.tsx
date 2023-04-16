@@ -30,6 +30,7 @@ export const FamilyNode = React.memo(
                     onClick={clickHandler}>
 
                     <div className={css.nodeText}>
+                        {(node.dateOfDeath && "✝")}
                         {formatName(node)}
                         <br/>
                         {formatDates(node)}
@@ -48,7 +49,7 @@ export const FamilyNode = React.memo(
 );
 
 function formatName(node: NodeDto) {
-    return (node.firstName ?? "... ") + (node.middleName ?? "") + (node.lastName ?? "...")
+    return `${node.firstName ?? "?"} ${node.middleName ?? ""} ${node.lastName ?? "?"}`
 }
 
 function formatDates(node: NodeDto) {

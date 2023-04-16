@@ -17,10 +17,11 @@ export default function Tree() {
             height={NODE_HEIGHT}
             renderNode={(n) => {
                 //workaround for non-generic node type, replaced with custom node representation
-                const node = nodes.find(n => n.id === n.id)
+                const node = nodes.find(node => node.id === n.id)
                 if (node == null) {
                     return null
                 }
+
                 return (
                     <FamilyNode
                         key={n.id}
