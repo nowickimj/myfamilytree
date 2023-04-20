@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import ReactImageFallback from "react-image-fallback";
 import classNames from 'classnames';
 import css from './FamilyNode.module.css';
@@ -18,8 +18,8 @@ interface FamilyNodeProps {
 
 export const FamilyNode = React.memo(
     function FamilyNode({node, hasSubTree, isRoot, isHover, onClick, onSubClick, style}: FamilyNodeProps) {
-        const clickHandler = useCallback(() => onClick(node.id), [node.id, onClick]);
-        const clickSubHandler = useCallback(() => onSubClick(node.id), [node.id, onSubClick]);
+        const clickHandler = useCallback(() => onClick(node.id), [node.id, onClick])
+        const clickSubHandler = useCallback(() => onSubClick(node.id), [node.id, onSubClick])
 
         return (
             <div className={css.root} style={style}>

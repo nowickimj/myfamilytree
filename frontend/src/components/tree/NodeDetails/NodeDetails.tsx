@@ -1,31 +1,42 @@
 import React, { memo, useCallback } from 'react';
 import classNames from 'classnames';
-import type { Node } from 'relatives-tree/lib/types';
-import { Relations } from './Relations';
 import css from './NodeDetails.module.css';
 
 interface NodeDetailsProps {
-  node: Readonly<Node>;
+  nodeId: string;
   className?: string;
   onSelect: (nodeId: string | undefined) => void;
-  onHover: (nodeId: string) => void;
-  onClear: () => void;
+  onHover?: (nodeId: string) => void;
+  onClear?: () => void;
 }
 
 export const NodeDetails = memo(
-  function NodeDetails({ node, className, ...props }: NodeDetailsProps) {
+  function NodeDetails({ nodeId, className, ...props }: NodeDetailsProps) {
     const closeHandler = useCallback(() => props.onSelect(undefined), [props]);
 
     return (
       <section className={classNames(css.root, className)}>
         <header className={css.header}>
-          <h3 className={css.title}>{node.id}</h3>
-          <button className={css.close} onClick={closeHandler}>&#10005;</button>
+          <h3 className={css.title}>id: {nodeId}</h3>
+            <div className={css.headerButtons}>
+                {/*TODO: add data modify modal*/}
+                <button className={css.headerButton} onClick={closeHandler}>&#9998;</button>
+                <button className={css.headerButton} onClick={closeHandler}>&#10006;</button>
+            </div>
         </header>
-        <Relations {...props} title="Parents" items={node.parents} />
-        <Relations {...props} title="Children" items={node.children} />
-        <Relations {...props} title="Siblings" items={node.siblings} />
-        <Relations {...props} title="Spouses" items={node.spouses} />
+          <div>
+              <p>Imię: {}</p>
+              <p>Drugie imię: {}</p>
+              <p>Nazwisko: {}</p>
+              <p>Nazwisko rodowe: {}</p>
+              <p>Data urodzenia: {}</p>
+              <p>Data śmierci: {}</p>
+              <p>Opis: {}</p>
+              <div>
+                  <p>Załączniki: {}</p>
+              </div>
+
+          </div>
       </section>
     );
   },

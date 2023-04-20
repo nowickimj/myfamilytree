@@ -3,12 +3,16 @@ import ReactFamilyTree from 'react-family-tree'
 import {FamilyNode} from "./node/FamilyNode"
 import {NodeDto, NODE_HEIGHT, NODE_WIDTH} from "./const"
 import data from './example-family.json'
+import {NodeDetails} from "./NodeDetails/NodeDetails"
+import css from "./Tree.module.css"
+import {RootSelector} from "./rootSelector/RootSelector";
 
 const DEFAULT_ROOT = "2"
 
 export default function Tree() {
-    const [nodes] = useState(data as unknown as Readonly<NodeDto>[]); //TODO: replace with API call
-    const [rootId, setRootId] = React.useState(DEFAULT_ROOT);
+    const [nodes] = useState(data as unknown as Readonly<NodeDto>[]) //TODO: replace with API call
+    const [rootId, setRootId] = React.useState(DEFAULT_ROOT)
+    const [selectedNode, selectNode] = useState<string>()
 
     return <div className="flex grid justify-items-center content-center mt-4 rounded-md px-8 py-4">
         <ReactFamilyTree
@@ -35,11 +39,17 @@ export default function Tree() {
                             transform: `translate(${n.left * (NODE_WIDTH / 2)}px, ${n.top * (NODE_HEIGHT / 2)}px)`
                         }}
                         isRoot={n.id === rootId}
-                        onClick={event => {
-                        }} onSubClick={setRootId}/>
+                        onClick={selectNode}
+                        onSubClick={setRootId}/>
                 )
             }}
         />
-        onContextMenu
+        {selectedNode && (
+            <NodeDetails
+                nodeId={selectedNode}
+                className={css.details}
+                onSelect={selectNode}
+            />
+        )}
     </div>;
 }

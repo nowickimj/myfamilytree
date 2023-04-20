@@ -1,10 +1,11 @@
 .root {
   padding: 10px;
   font-family: monospace;
-  font-size: 9px;
+  font-size: 16px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
+  width: 300px;
 }
 
 .header {
@@ -18,12 +19,19 @@
   margin: 0;
 }
 
-.close {
+.headerButtons {
   display: flex;
-  width: 20px;
-  height: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.headerButton {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   align-items: center;
   justify-content: center;
   line-height: 1;
@@ -33,6 +41,6 @@
   cursor: pointer;
 }
 
-.close:hover {
+.headerButton:hover {
   color: #666;
 }
