@@ -44,26 +44,22 @@
   opacity: .5;
 }
 
-.sub {
+.nodeIcons {
   position: absolute;
+  display: flex;
   top: 6px;
   right: 20px;
+}
+
+.nodeIcon {
   width: 35px;
   height: 20px;
-  font-size: 16px;
+  font-size: 12px;
   border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 5px 5px;
-  background: #fff;
+  background: #bbbbbb;
   cursor: pointer;
   text-align: center;
   word-break: break-all;
   white-space: pre-wrap;
-}
-
-.sub.male {
-  background: #bbbbbb;
-}
-
-.sub.female {
-  background: #cccccc;
 }

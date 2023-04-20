@@ -38,19 +38,23 @@ export const FamilyNode = React.memo(
                     </div>
                     <div className={css.nodeDates}>
                         <ReactImageFallback
+                            // TODO: load node's avatar
                             src={defaultAvatar}
                             fallbackImage={defaultAvatar}
-                            //src={`http://digisoft.co.il/ftree/${node.img}.jpg`}
                             height={70}
                          />
                         {formatDates(node)}
                     </div>
                 </div>
-                {hasSubTree && (
-                  <div className={classNames(css.sub, css[node.gender])} onClick={clickSubHandler}>
-                      <p>...</p>
-                  </div>
-                )}
+                <div className={css.nodeIcons}>
+                    {/*<button className={css.nodeIcon} onClick={(event) => {} }>➕</button>*/}
+                    {hasSubTree && (
+                        <div className={css.nodeIcon} onClick={clickSubHandler}>
+                            <p>...</p>
+                        </div>
+                    )}
+
+                </div>
             </div>
         );
     },

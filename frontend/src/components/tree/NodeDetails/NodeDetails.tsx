@@ -19,9 +19,8 @@ export const NodeDetails = memo(
         <header className={css.header}>
           <h3 className={css.title}>id: {nodeId}</h3>
             <div className={css.headerButtons}>
-                {/*TODO: add data modify modal*/}
-                <button className={css.headerButton} onClick={closeHandler}>&#9998;</button>
-                <button className={css.headerButton} onClick={closeHandler}>&#10006;</button>
+                <button className={css.headerButton} onClick={closeHandler}>&#9998;</button> {/*TODO: add data modify modal*/}
+                <button className={css.headerButton} onClick={closeHandler}>&#10008;</button>
             </div>
         </header>
           <div>
