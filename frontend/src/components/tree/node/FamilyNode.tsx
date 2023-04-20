@@ -41,16 +41,15 @@ export const FamilyNode = React.memo(
                             src={defaultAvatar}
                             fallbackImage={defaultAvatar}
                             //src={`http://digisoft.co.il/ftree/${node.img}.jpg`}
-                            height={100}
+                            height={70}
                          />
                         {formatDates(node)}
                     </div>
                 </div>
                 {hasSubTree && (
-                  <div
-                    className={classNames(css.sub, css[node.gender])}
-                    onClick={clickSubHandler}
-                  />
+                  <div className={classNames(css.sub, css[node.gender])} onClick={clickSubHandler}>
+                      <p>...</p>
+                  </div>
                 )}
             </div>
         );

@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import ReactFamilyTree from 'react-family-tree'
-import {FamilyNode} from "./FamilyNode/FamilyNode"
+import {FamilyNode} from "./node/FamilyNode"
 import {NodeDto, NODE_HEIGHT, NODE_WIDTH} from "./const"
 import data from './example-family.json'
 
@@ -39,5 +39,7 @@ export default function Tree() {
                         }} onSubClick={setRootId}/>
                 )
             }}
-        /></div>;
+        />
+        onContextMenu
+    </div>;
 }
