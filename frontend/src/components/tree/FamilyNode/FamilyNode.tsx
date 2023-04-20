@@ -1,7 +1,9 @@
 import React, {useCallback} from 'react';
+import ReactImageFallback from "react-image-fallback";
 import classNames from 'classnames';
 import css from './FamilyNode.module.css';
 import {NodeDto} from "../const";
+import defaultAvatar from "../../../assets/default-avatar.jpg"
 
 
 interface FamilyNodeProps {
@@ -30,10 +32,17 @@ export const FamilyNode = React.memo(
                     )}
                     onClick={clickHandler}>
 
-                    <div className={css.nodeText}>
+                    <div className={css.nodeFullName}>
                         {(node.dateOfDeath && "✝")}
                         {formatName(node)}
-                        <br/>
+                    </div>
+                    <div className={css.nodeDates}>
+                        <ReactImageFallback
+                            src={defaultAvatar}
+                            fallbackImage={defaultAvatar}
+                            //src={`http://digisoft.co.il/ftree/${node.img}.jpg`}
+                            height={100}
+                         />
                         {formatDates(node)}
                     </div>
                 </div>

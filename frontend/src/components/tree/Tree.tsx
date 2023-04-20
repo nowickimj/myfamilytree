@@ -32,7 +32,7 @@ export default function Tree() {
                         style={{
                             width: NODE_WIDTH,
                             height: NODE_HEIGHT,
-                            transform: `translate(${n.left * (NODE_WIDTH / 2)}px, ${n.top * (NODE_HEIGHT / 2)}px)`,
+                            transform: `translate(${n.left * (NODE_WIDTH / 2)}px, ${n.top * (NODE_HEIGHT / 2)}px)`
                         }}
                         isRoot={n.id === rootId}
                         onClick={event => {

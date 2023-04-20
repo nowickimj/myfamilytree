@@ -1,4 +1,4 @@
-import logo from '../assets/tree-logo-white.svg'
+import logo from '../../assets/tree-logo-white.svg'
 
 export default function Navbar() {
     return (
@@ -6,8 +6,8 @@ export default function Navbar() {
             <div className="flex justify-between items-center text-white">
                 <img src={logo} className="App-logo w-10 rounded-full" alt="logo" />
                 <ul className="hidden md:flex">
-                    <li className="p-4"><a href="/" className="hover:underline">Home</a></li>
-                    <li className="p-4"><a href="/tree" className="hover:underline">Family tree</a></li>
+                    <li className="p-4"><a href="/" className="hover:underline">Drzewo</a></li>
+                    <li className="p-4"><a href="/about" className="hover:underline">O projekcie</a></li>
                 </ul>
             </div>
         </div>

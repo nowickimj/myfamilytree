@@ -1,2 +1,2 @@
-./mongodb/data
-./neo4j/data
+mongodb/data/*
+neo4j/data/*

@@ -31,8 +31,15 @@
   border-color: rgba(0, 0, 0, .8);
 }
 
-.nodeText {
-  font-size: 7px;
+.nodeFullName {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
+  opacity: .5;
+}
+
+.nodeDates {
+  font-size: 13px;
   line-height: 1;
   opacity: .5;
 }
