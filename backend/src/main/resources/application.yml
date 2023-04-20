@@ -23,8 +23,9 @@ spring:
             password: supersecret
             auto-index-creation: true
 
-
-
 springdoc:
     swagger-ui:
         path: /swagger.html
+
+cors:
+    allowed-origins: http://localhost:3000, https://mnowicki.net
