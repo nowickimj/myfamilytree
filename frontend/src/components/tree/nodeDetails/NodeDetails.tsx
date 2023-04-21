@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import css from './NodeDetails.module.css';
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
+import {formatNullableNodeDateProperty, formatNullableNodeStringProperty} from "../nodeUtils";
 
 const BASE_API = "http://localhost:8080/api"
 
@@ -31,6 +32,7 @@ export const NodeDetails = memo(
         const closeHandler = useCallback(() => props.onSelect(undefined), [props]);
 
         const {data} = useQuery({
+            queryKey: ["getNodeDetails", nodeId],
             queryFn: async (): Promise<GetNodeDetailsResponse> => {
                 const {data} = await axios.get(
                     BASE_API + "/persons/" + nodeId
@@ -51,12 +53,12 @@ export const NodeDetails = memo(
                     </div>
                 </header>
                 <div>
-                    <p>Imię: {formatOptionalStringProperty(data?.firstName)}</p>
-                    <p>Drugie imię: {formatOptionalStringProperty(data?.middleName)}</p>
-                    <p>Nazwisko: {formatOptionalStringProperty(data?.lastName)}</p>
-                    {data?.maidenName && (<p>Nazwisko rodowe: {formatOptionalStringProperty(data?.maidenName)}</p>)}
-                    <p>Data urodzenia: {formatOptionalDateProperty(data?.dateOfBirth)}</p>
-                    {data?.dateOfDeath && (<p>Data śmierci: {formatOptionalDateProperty(data?.dateOfDeath)}</p>)}
+                    <p>Imię: {formatNullableNodeStringProperty(data?.firstName)}</p>
+                    <p>Drugie imię: {formatNullableNodeStringProperty(data?.middleName)}</p>
+                    <p>Nazwisko: {formatNullableNodeStringProperty(data?.lastName)}</p>
+                    {data?.maidenName && (<p>Nazwisko rodowe: {formatNullableNodeStringProperty(data?.maidenName)}</p>)}
+                    <p>Data urodzenia: {formatNullableNodeDateProperty(data?.dateOfBirth)}</p>
+                    {data?.dateOfDeath && (<p>Data śmierci: {formatNullableNodeDateProperty(data?.dateOfDeath)}</p>)}
                     <p>Opis: -</p>
                     <div>
                         <p>Załączniki: -</p>
@@ -67,11 +69,3 @@ export const NodeDetails = memo(
         );
     },
 );
-
-function formatOptionalStringProperty(property: string | undefined): string {
-    return property ?? "-"
-}
-
-function formatOptionalDateProperty(property: number[] | undefined): string {
-    return property ? property[0] + "-" + property[1] + "-" + property[2] : "-";
-}

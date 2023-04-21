@@ -23,19 +23,11 @@
   background: #d5a6bd;
 }
 
-.maleAlive {
-  background: #6fa8dc;
-}
-
-.maleDeceased {
+.male.deceased {
   background: #2986cc;
 }
 
-.femaleAlive {
-  background: #d5a6bd;
-}
-
-.femaleDeceased {
+.female.deceased {
   background: #c90076;
 }
 

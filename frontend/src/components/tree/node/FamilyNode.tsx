@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import css from './FamilyNode.module.css';
 import {NodeDto} from "../const";
 import defaultAvatar from "../../../assets/default-avatar.jpg"
+import {formatNullableNodeDateProperty} from "../nodeUtils";
 
 
 interface FamilyNodeProps {
@@ -20,10 +21,11 @@ export const FamilyNode = React.memo(
     function FamilyNode({node, hasSubTree, isRoot, isHover, onClick, onSubClick, style}: FamilyNodeProps) {
         const clickHandler = useCallback(() => onClick(node.id), [node.id, onClick])
         const clickSubHandler = useCallback(() => onSubClick(node.id), [node.id, onSubClick])
-        const genderSpecificNodeClassName = node.gender + (node.dateOfDeath ? "Deceased" : "Alive")
-        const nodeClassNames = classNames(
+        const genderSpecificNodeClassName = node.gender
+        let nodeClassNames = classNames(
             css.node,
             css[genderSpecificNodeClassName],
+            css[node.dateOfDeath ? "deceased" : ""],
             isRoot && css.isRoot,
             isHover && css.isHover,
         )
@@ -64,5 +66,7 @@ function formatName(node: NodeDto) {
 }
 
 function formatDates(node: NodeDto) {
-    return (node.dateOfBirth ?? "?") + (node.dateOfDeath ? " - " + node.dateOfDeath : "")
+    let dateOfBirth = formatNullableNodeDateProperty(node.dateOfBirth);
+    let dateOfDeathSuffix = node.dateOfDeath ? (" - " + formatNullableNodeDateProperty(node.dateOfDeath)) : "";
+    return dateOfBirth + dateOfDeathSuffix
 }

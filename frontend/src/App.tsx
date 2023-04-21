@@ -3,7 +3,7 @@ import Navbar from "./components/navbar/Navbar";
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import Home from "./components/home/Home";
+import About from "./components/home/Home";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Tree from "./components/tree/Tree";
 import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
@@ -17,14 +17,14 @@ const router = createBrowserRouter([
     },
     {
         path: "/about",
-        element: <Home/>
+        element: <About/>
     }
 ])
 
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+            cacheTime: 1000 * 60 * 60
         },
     },
 });

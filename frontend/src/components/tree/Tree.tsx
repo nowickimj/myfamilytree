@@ -2,25 +2,44 @@ import React, {useState} from "react"
 import ReactFamilyTree from 'react-family-tree'
 import {FamilyNode} from "./node/FamilyNode"
 import {NodeDto, NODE_HEIGHT, NODE_WIDTH} from "./const"
-import data from './example-family.json'
-import {NodeDetails} from "./NodeDetails/NodeDetails"
+import {NodeDetails} from "./nodeDetails/NodeDetails"
 import css from "./Tree.module.css"
+import {useQuery} from "@tanstack/react-query"
+import axios from "axios";
+import {ExtNode} from "relatives-tree/lib/types";
 
-const DEFAULT_ROOT = "2"
+const BASE_API = "http://localhost:8080/api"
+
+interface GetTreeResponse {
+    nodes: NodeDto[],
+    rootId: string
+}
 
 export default function Tree() {
-    const [nodes] = useState(data as unknown as Readonly<NodeDto>[]) //TODO: replace with API call
-    const [rootId, setRootId] = React.useState(DEFAULT_ROOT)
+    const {data} = useQuery({
+        queryFn: async (): Promise<GetTreeResponse> => {
+            const {data} = await axios.get(BASE_API + "/tree");
+            return data;
+        }
+    })
+
+    const nodes: NodeDto[] = data?.nodes ?? []
+    const [rootId, setRootId] = React.useState("2")
     const [selectedNode, selectNode] = useState<string>()
 
+    if(nodes.length == 0) {
+        return <div>
+            <p>Łączenie z serwerem...</p>
+        </div>
+    }
     return <div className="flex grid justify-items-center content-center mt-4 rounded-md px-8 py-4">
         <ReactFamilyTree
             nodes={nodes}
             rootId={rootId}
             width={NODE_WIDTH}
             height={NODE_HEIGHT}
-            renderNode={(n) => {
-                // workaround for non-generic node type, replaced with custom node representation
+            renderNode={(n: ExtNode) => {
+                // workaround for non-generic type 'ExtNode', replaced with custom node representation
                 const node = nodes.find(node => node.id === n.id)
                 if (node == null) {
                     return null

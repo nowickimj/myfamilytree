@@ -7,6 +7,6 @@ export interface NodeDto extends Node {
   firstName?: string,
   middleName?: string,
   lastName?: string,
-  dateOfBirth?: string,
-  dateOfDeath?: string
+  dateOfBirth?: number[],
+  dateOfDeath?: number[]
 }
