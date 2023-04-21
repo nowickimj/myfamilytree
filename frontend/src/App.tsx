@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import Navbar from "./components/navbar/Navbar";
+import MainNavbar from "./components/navbar/MainNavbar";
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -9,6 +9,7 @@ import Tree from "./components/tree/Tree";
 import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
 import {QueryClient} from "@tanstack/react-query";
 import {createSyncStoragePersister} from "@tanstack/query-sync-storage-persister";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
     {
@@ -39,7 +40,7 @@ function App() {
     return (
         <PersistQueryClientProvider client={queryClient} persistOptions={{persister}}>
         <div className="px-6 lg:px-20 xl:px-36 bg-dark-500">
-            <Navbar />
+            <MainNavbar />
             <RouterProvider router={router}/>
         </div>
         </PersistQueryClientProvider>

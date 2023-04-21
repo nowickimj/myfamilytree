@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import ReactFamilyTree from 'react-family-tree'
 import {FamilyNode} from "./node/FamilyNode"
-import {NodeDto, NODE_HEIGHT, NODE_WIDTH} from "./const"
+import {NODE_HEIGHT, NODE_WIDTH, NodeDto} from "./const"
 import {NodeDetails} from "./nodeDetails/NodeDetails"
 import css from "./Tree.module.css"
 import {useQuery} from "@tanstack/react-query"
@@ -27,7 +27,7 @@ export default function Tree() {
     const [rootId, setRootId] = React.useState("2")
     const [selectedNode, selectNode] = useState<string>()
 
-    if(nodes.length == 0) {
+    if (nodes.length == 0) {
         return <div>
             <p>Łączenie z serwerem...</p>
         </div>

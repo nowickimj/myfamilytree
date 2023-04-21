@@ -1,11 +1,11 @@
-import React, {memo, useCallback} from 'react';
-import classNames from 'classnames';
+import React, {memo, useCallback, useState} from 'react';
 import css from './NodeDetails.module.css';
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {getNodeDetailsProperties} from "../nodeUtils";
 import ReactImageFallback from "react-image-fallback";
 import defaultAvatar from "../../../assets/default-avatar.jpg";
+import Offcanvas from "react-bootstrap/Offcanvas";
 
 const BASE_API = "http://localhost:8080/api"
 
@@ -30,8 +30,11 @@ interface NodeDetailsProps {
 
 export const NodeDetails = memo(
     function NodeDetails({nodeId, className, ...props}: NodeDetailsProps) {
-
-        const closeHandler = useCallback(() => props.onSelect(undefined), [props]);
+        const [show, setShow] = useState(nodeId !== null);
+        const handleClose = useCallback(() => {
+            setShow(false)
+            props.onSelect(undefined)
+        }, [props]);
 
         const {data} = useQuery({
             queryKey: ["getNodeDetails", nodeId],
@@ -45,45 +48,56 @@ export const NodeDetails = memo(
         const properties = getNodeDetailsProperties(data)
 
         return (
-            <section className={classNames(css.root, className)}>
-                <div>
-                    <header className={css.header}>
-                        <h3 className={css.title}>#{nodeId}</h3>
-                        <div className={css.headerButtons}>
-                            <button className={css.headerButton} onClick={closeHandler}>&#9998;</button>
-                            {/*TODO: add data modify modal*/}
-                            <button className={css.headerButton} onClick={closeHandler}>&#10008;</button>
-                        </div>
-                    </header>
-                    <ReactImageFallback
-                        // TODO: load node's avatar
-                        src={defaultAvatar}
-                        fallbackImage={defaultAvatar}
-                        height={70}
-                    />
-                </div>
-                <br/>
-                <div>
-                    <table className="table-light">
-                        <tbody>
-                        {properties.map((property) => {
-                            return (
-                                <tr>
-                                    <td>{property.name}:</td>
-                                    <td>{property.value}</td>
-                                </tr>
-                            )
-                        })}
-                        </tbody>
-                    </table>
-                    <br/>
-                    <p>Opis: -</p>
-                    <div>
-                        <p>Załączniki: -</p>
-                    </div>
+            <>
+                <Offcanvas show={show} onHide={handleClose} placement="end">
+                    <Offcanvas.Header>
+                        <div>
+                            <Offcanvas.Title>
+                                #{nodeId}
+                                <div className={css.headerButtons}>
+                                    <button className="btn btn-secondary" onClick={(event) => {
+                                        console.log("save button clicked")
+                                    }}>&#9998; Zapisz</button>
+                                    {/*TODO: add data modify modal*/}
+                                    <button className="btn btn-secondary" onClick={(event) => {
+                                        console.log("delete button clicked")
+                                    }}>&#10008; Usuń</button>
+                                    <button className="btn btn-secondary" onClick={handleClose}>Zamknij</button>
+                                </div>
 
-                </div>
-            </section>
+                            </Offcanvas.Title>
+                            <ReactImageFallback
+                                // TODO: load node's avatar
+                                src={defaultAvatar}
+                                fallbackImage={defaultAvatar}
+                                height={70}/>
+                        </div>
+
+                    </Offcanvas.Header>
+                    <Offcanvas.Body>
+                        <div>
+                            <table className="table-light">
+                                <tbody>
+                                {properties.map((property) => {
+                                    return (
+                                        <tr>
+                                            <td>{property.name}:</td>
+                                            <td>{property.value}</td>
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+                            <br/>
+                            <p>Opis: -</p>
+                            <div>
+                                <p>Załączniki: -</p>
+                            </div>
+
+                        </div>
+                    </Offcanvas.Body>
+                </Offcanvas>
+            </>
         );
     },
 );
