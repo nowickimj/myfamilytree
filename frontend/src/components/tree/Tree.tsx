@@ -5,7 +5,6 @@ import {NodeDto, NODE_HEIGHT, NODE_WIDTH} from "./const"
 import data from './example-family.json'
 import {NodeDetails} from "./NodeDetails/NodeDetails"
 import css from "./Tree.module.css"
-import {RootSelector} from "./rootSelector/RootSelector";
 
 const DEFAULT_ROOT = "2"
 

@@ -30,8 +30,7 @@ export const NodeDetails = memo(
 
         const closeHandler = useCallback(() => props.onSelect(undefined), [props]);
 
-        const {status, data, error, isFetching} = useQuery({
-            queryKey: ["posts"],
+        const {data} = useQuery({
             queryFn: async (): Promise<GetNodeDetailsResponse> => {
                 const {data} = await axios.get(
                     BASE_API + "/persons/" + nodeId

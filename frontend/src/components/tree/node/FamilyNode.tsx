@@ -20,18 +20,17 @@ export const FamilyNode = React.memo(
     function FamilyNode({node, hasSubTree, isRoot, isHover, onClick, onSubClick, style}: FamilyNodeProps) {
         const clickHandler = useCallback(() => onClick(node.id), [node.id, onClick])
         const clickSubHandler = useCallback(() => onSubClick(node.id), [node.id, onSubClick])
+        const genderSpecificNodeClassName = node.gender + (node.dateOfDeath ? "Deceased" : "Alive")
+        const nodeClassNames = classNames(
+            css.node,
+            css[genderSpecificNodeClassName],
+            isRoot && css.isRoot,
+            isHover && css.isHover,
+        )
 
         return (
             <div className={css.root} style={style}>
-                <div
-                    className={classNames(
-                        css.inner,
-                        css[node.gender],
-                        isRoot && css.isRoot,
-                        isHover && css.isHover,
-                    )}
-                    onClick={clickHandler}>
-
+                <div className={nodeClassNames} onClick={clickHandler}>
                     <div className={css.nodeFullName}>
                         {(node.dateOfDeath && "✝")}
                         {formatName(node)}

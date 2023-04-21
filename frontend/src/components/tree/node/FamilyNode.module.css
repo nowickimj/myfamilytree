@@ -4,7 +4,7 @@
   padding: 10px;
 }
 
-.inner {
+.node {
   display: flex;
   flex: 1;
   align-items: center;
@@ -21,6 +21,22 @@
 
 .female {
   background: #d5a6bd;
+}
+
+.maleAlive {
+  background: #6fa8dc;
+}
+
+.maleDeceased {
+  background: #2986cc;
+}
+
+.femaleAlive {
+  background: #d5a6bd;
+}
+
+.femaleDeceased {
+  background: #c90076;
 }
 
 .isRoot {
