@@ -3,11 +3,13 @@ import classNames from 'classnames';
 import css from './NodeDetails.module.css';
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
-import {formatNullableNodeDateProperty, formatNullableNodeStringProperty} from "../nodeUtils";
+import {getNodeDetailsProperties} from "../nodeUtils";
+import ReactImageFallback from "react-image-fallback";
+import defaultAvatar from "../../../assets/default-avatar.jpg";
 
 const BASE_API = "http://localhost:8080/api"
 
-interface GetNodeDetailsResponse {
+export interface GetNodeDetailsResponse {
     firstName?: string,
     lastName?: string,
     middleName?: string,
@@ -40,25 +42,41 @@ export const NodeDetails = memo(
                 return data;
             },
         })
+        const properties = getNodeDetailsProperties(data)
 
         return (
             <section className={classNames(css.root, className)}>
-
-                <header className={css.header}>
-                    <h3 className={css.title}>id: {nodeId}</h3>
-                    <div className={css.headerButtons}>
-                        <button className={css.headerButton} onClick={closeHandler}>&#9998;</button>
-                        {/*TODO: add data modify modal*/}
-                        <button className={css.headerButton} onClick={closeHandler}>&#10008;</button>
-                    </div>
-                </header>
                 <div>
-                    <p>Imię: {formatNullableNodeStringProperty(data?.firstName)}</p>
-                    <p>Drugie imię: {formatNullableNodeStringProperty(data?.middleName)}</p>
-                    <p>Nazwisko: {formatNullableNodeStringProperty(data?.lastName)}</p>
-                    {data?.maidenName && (<p>Nazwisko rodowe: {formatNullableNodeStringProperty(data?.maidenName)}</p>)}
-                    <p>Data urodzenia: {formatNullableNodeDateProperty(data?.dateOfBirth)}</p>
-                    {data?.dateOfDeath && (<p>Data śmierci: {formatNullableNodeDateProperty(data?.dateOfDeath)}</p>)}
+                    <header className={css.header}>
+                        <h3 className={css.title}>#{nodeId}</h3>
+                        <div className={css.headerButtons}>
+                            <button className={css.headerButton} onClick={closeHandler}>&#9998;</button>
+                            {/*TODO: add data modify modal*/}
+                            <button className={css.headerButton} onClick={closeHandler}>&#10008;</button>
+                        </div>
+                    </header>
+                    <ReactImageFallback
+                        // TODO: load node's avatar
+                        src={defaultAvatar}
+                        fallbackImage={defaultAvatar}
+                        height={70}
+                    />
+                </div>
+                <br/>
+                <div>
+                    <table className="table-light">
+                        <tbody>
+                        {properties.map((property) => {
+                            return (
+                                <tr>
+                                    <td>{property.name}:</td>
+                                    <td>{property.value}</td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
+                    <br/>
                     <p>Opis: -</p>
                     <div>
                         <p>Załączniki: -</p>
