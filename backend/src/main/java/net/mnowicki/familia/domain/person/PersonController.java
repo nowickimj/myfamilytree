@@ -4,6 +4,7 @@ import net.mnowicki.familia.domain.family.FamilyService;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
 import net.mnowicki.familia.domain.person.dto.PersonDto;
+import net.mnowicki.familia.domain.person.dto.UpdatePersonDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -39,6 +40,11 @@ public class PersonController {
     @PostMapping
     PersonDto create(@RequestBody @Validated CreatePersonDto dto) {
         return personService.create(dto);
+    }
+
+    @PatchMapping("/{id}")
+    PersonDto update(@NonNull @PathVariable("id") long id, @RequestBody @Validated UpdatePersonDto dto) {
+        return personService.update(id, dto);
     }
 
     @PostMapping("/{id}/partners/{partnerId}")
