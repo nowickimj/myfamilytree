@@ -1,24 +1,14 @@
-import React, {memo, useCallback, useState} from 'react';
+import React, {memo, MouseEventHandler, useCallback, useState} from 'react';
 import css from './NodeDetails.module.css';
-import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {getNodeDetailsProperties} from "../nodeUtils";
 import ReactImageFallback from "react-image-fallback";
 import defaultAvatar from "../../../assets/default-avatar.jpg";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import PersonApi from "../../../PersonApi";
+import {DeleteNodeModal} from "../deleteNode/DeleteNode";
 
-const BASE_API = "http://localhost:8080/api"
-
-export interface GetNodeDetailsResponse {
-    firstName?: string,
-    lastName?: string,
-    middleName?: string,
-    maidenName?: string,
-    dateOfBirth?: number[],
-    dateOfDeath?: number[],
-    description: string,
-    attachments: string[]
-}
+const personApi = new PersonApi()
 
 interface NodeDetailsProps {
     nodeId: string;
@@ -29,6 +19,7 @@ interface NodeDetailsProps {
 }
 
 export const NodeDetails = memo(
+
     function NodeDetails({nodeId, className, ...props}: NodeDetailsProps) {
         const [show, setShow] = useState(nodeId !== null);
         const handleClose = useCallback(() => {
@@ -36,16 +27,13 @@ export const NodeDetails = memo(
             props.onSelect(undefined)
         }, [props]);
 
-        const {data} = useQuery({
-            queryKey: ["getNodeDetails", nodeId],
-            queryFn: async (): Promise<GetNodeDetailsResponse> => {
-                const {data} = await axios.get(
-                    BASE_API + "/persons/" + nodeId
-                );
-                return data;
-            },
-        })
+        const {data} = useQuery(personApi.getPerson(nodeId))
         const properties = getNodeDetailsProperties(data)
+
+        const [isDeleteModalShown, setShowDeleteModal] = useState(false)
+        const handleDelete: MouseEventHandler<HTMLButtonElement> = (event ) => {
+            setShowDeleteModal(isDeleteModalShown => !isDeleteModalShown)
+        }
 
         return (
             <>
@@ -55,14 +43,26 @@ export const NodeDetails = memo(
                             <Offcanvas.Title>
                                 #{nodeId}
                                 <div className={css.headerButtons}>
-                                    <button className="btn btn-secondary" onClick={(event) => {
+                                    <button className="btn btn-secondary headerButton" onClick={(event) => {
                                         console.log("save button clicked")
-                                    }}>&#9998; Zapisz</button>
-                                    {/*TODO: add data modify modal*/}
-                                    <button className="btn btn-secondary" onClick={(event) => {
-                                        console.log("delete button clicked")
-                                    }}>&#10008; Usuń</button>
-                                    <button className="btn btn-secondary" onClick={handleClose}>Zamknij</button>
+                                    }}>
+                                        &#9998; Zapisz
+                                    </button>
+                                    <button className="btn btn-secondary headerButton" onClick={handleDelete}>&#10008; Usuń</button>
+                                    <button className="btn btn-secondary headerButton" onClick={handleClose}>
+                                        Zamknij
+                                    </button>
+                                    <br/>
+                                    {/*<button className="btn btn-secondary headerButton" onClick={(event) => {*/}
+                                    {/*    console.log("addParent button clicked")*/}
+                                    {/*}}>*/}
+                                    {/*   Dodaj rodzica*/}
+                                    {/*</button>*/}
+                                    {/*<button className="btn btn-secondary headerButton" onClick={(event) => {*/}
+                                    {/*    console.log("addChild button clicked")*/}
+                                    {/*}}>*/}
+                                    {/*    Dodaj dziecko*/}
+                                    {/*</button>*/}
                                 </div>
 
                             </Offcanvas.Title>
@@ -97,6 +97,8 @@ export const NodeDetails = memo(
                         </div>
                     </Offcanvas.Body>
                 </Offcanvas>
+
+                {isDeleteModalShown && (<DeleteNodeModal setShow={setShowDeleteModal} nodeId={nodeId} fullName={data?.firstName + " " + data?.lastName}/>) }
             </>
         );
     },

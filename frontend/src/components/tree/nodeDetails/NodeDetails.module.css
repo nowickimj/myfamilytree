@@ -24,7 +24,7 @@
 .headerButtons {
     display: flex;
     justify-content: space-between;
-    margin: 0 auto;
+    margin-right: 13px;
     padding: 10px 0;
 }
 

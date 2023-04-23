@@ -17,6 +17,7 @@ interface GetTreeResponse {
 
 export default function Tree() {
     const {data} = useQuery({
+        queryKey: ["getTree", null],
         queryFn: async (): Promise<GetTreeResponse> => {
             const {data} = await axios.get(BASE_API + "/tree");
             return data;
