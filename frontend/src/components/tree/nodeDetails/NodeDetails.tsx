@@ -43,13 +43,13 @@ export const NodeDetails = memo(
                             <Offcanvas.Title>
                                 #{nodeId}
                                 <div className={css.headerButtons}>
-                                    <button className="btn btn-secondary headerButton" onClick={(event) => {
+                                    <button className="btn btn-secondary mr-1" onClick={(event) => {
                                         console.log("save button clicked")
                                     }}>
                                         &#9998; Zapisz
                                     </button>
-                                    <button className="btn btn-secondary headerButton" onClick={handleDelete}>&#10008; Usuń</button>
-                                    <button className="btn btn-secondary headerButton" onClick={handleClose}>
+                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete}>&#10008; Usuń</button>
+                                    <button className="btn btn-secondary mr-1" onClick={handleClose}>
                                         Zamknij
                                     </button>
                                     <br/>
@@ -80,9 +80,9 @@ export const NodeDetails = memo(
                                 <tbody>
                                 {properties.map((property) => {
                                     return (
-                                        <tr>
-                                            <td>{property.name}:</td>
-                                            <td>{property.value}</td>
+                                        <tr key={property.idx}>
+                                            <td key={property.name}>{property.name}:</td>
+                                            <td key={property.value}>{property.value}</td>
                                         </tr>
                                     )
                                 })}
