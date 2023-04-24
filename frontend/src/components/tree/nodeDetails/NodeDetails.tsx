@@ -7,6 +7,7 @@ import defaultAvatar from "../../../assets/default-avatar.jpg";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import PersonApi from "../../../PersonApi";
 import {DeleteNodeModal} from "../deleteNode/DeleteNode";
+import {AddChildModal} from "../addChild/AddChildModal";
 
 const personApi = new PersonApi()
 
@@ -19,7 +20,6 @@ interface NodeDetailsProps {
 }
 
 export const NodeDetails = memo(
-
     function NodeDetails({nodeId, className, ...props}: NodeDetailsProps) {
         const [show, setShow] = useState(nodeId !== null);
         const handleClose = useCallback(() => {
@@ -31,8 +31,13 @@ export const NodeDetails = memo(
         const properties = getNodeDetailsProperties(data)
 
         const [isDeleteModalShown, setShowDeleteModal] = useState(false)
-        const handleDelete: MouseEventHandler<HTMLButtonElement> = (event ) => {
+        const [isAddChildModalShown, setShowAddChildModal] = useState(false)
+
+        const handleDelete: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowDeleteModal(isDeleteModalShown => !isDeleteModalShown)
+        }
+        const handleAddChild: MouseEventHandler<HTMLButtonElement> = (event) => {
+            setShowAddChildModal(isAddChildModalShown => !isAddChildModalShown)
         }
 
         return (
@@ -48,29 +53,37 @@ export const NodeDetails = memo(
                                     }}>
                                         &#9998; Zapisz
                                     </button>
-                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete}>&#10008; Usuń</button>
+                                    <button className="btn btn-secondary  mr-1"
+                                            onClick={handleDelete}>&#10008; Usuń
+                                    </button>
                                     <button className="btn btn-secondary mr-1" onClick={handleClose}>
                                         Zamknij
                                     </button>
-                                    <br/>
                                     {/*<button className="btn btn-secondary headerButton" onClick={(event) => {*/}
                                     {/*    console.log("addParent button clicked")*/}
                                     {/*}}>*/}
                                     {/*   Dodaj rodzica*/}
                                     {/*</button>*/}
-                                    {/*<button className="btn btn-secondary headerButton" onClick={(event) => {*/}
-                                    {/*    console.log("addChild button clicked")*/}
-                                    {/*}}>*/}
-                                    {/*    Dodaj dziecko*/}
-                                    {/*</button>*/}
+                                    <div className={css.headerButtons}>
+                                        <button className="btn btn-secondary mr-1" onClick={handleAddChild}>
+                                            Dodaj potomka
+                                        </button>
+                                        <button className="btn btn-secondary mr-1" onClick={(event) => {
+                                            console.log("addParent button clicked")
+                                        }}>
+                                            Dodaj rodzica
+                                        </button>
+                                    </div>
                                 </div>
 
                             </Offcanvas.Title>
-                            <ReactImageFallback
-                                // TODO: load node's avatar
-                                src={defaultAvatar}
-                                fallbackImage={defaultAvatar}
-                                height={70}/>
+                            <div>
+                                <ReactImageFallback
+                                    // TODO: load node's avatar
+                                    src={defaultAvatar}
+                                    fallbackImage={defaultAvatar}
+                                    height={70}/>
+                            </div>
                         </div>
 
                     </Offcanvas.Header>
@@ -93,12 +106,13 @@ export const NodeDetails = memo(
                             <div>
                                 <p>Załączniki: -</p>
                             </div>
-
                         </div>
                     </Offcanvas.Body>
                 </Offcanvas>
 
-                {isDeleteModalShown && (<DeleteNodeModal setShow={setShowDeleteModal} nodeId={nodeId} fullName={data?.firstName + " " + data?.lastName}/>) }
+
+                {isDeleteModalShown && (<DeleteNodeModal setShow={setShowDeleteModal} nodeId={nodeId} fullName={data?.firstName + " " + data?.lastName}/>)}
+                {isAddChildModalShown && (<AddChildModal setShow={setShowAddChildModal} nodeId={nodeId}/>)}
             </>
         );
     },

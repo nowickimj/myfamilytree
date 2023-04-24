@@ -39,6 +39,7 @@ export default function Tree() {
             rootId={rootId}
             width={NODE_WIDTH}
             height={NODE_HEIGHT}
+            //placeholders={true}
             renderNode={(n: ExtNode) => {
                 // workaround for non-generic type 'ExtNode', replaced with custom node representation
                 const node = nodes.find(node => node.id === n.id)

@@ -13,6 +13,18 @@ export interface GetNodeDetailsResponse {
     attachments: string[]
 }
 
+export interface AddChildRequest {
+    coParentId?: string,
+    firstName: string,
+    lastName: string,
+    gender: string,
+    middleName?: string,
+    maidenName?: string,
+    dateOfBirth?: string,
+    dateOfDeath?: string,
+    description?: string
+}
+
 export default class PersonApi {
 
     public getPerson(nodeId: string) {
@@ -42,5 +54,20 @@ export default class PersonApi {
         }
     }
 
+    public addChild(nodeId: string, request: AddChildRequest) {
+        return {
+            queryKey: ["addChild", nodeId],
+            queryFn: async (): Promise<boolean> => {
+                const {data} = await axios.post(
+                    BASE_API + "/persons/" + nodeId + "children",
+                    request
+                );
+                return true;
+            },
+            options: {
+                manual: true
+            }
+        }
+    }
 
 }

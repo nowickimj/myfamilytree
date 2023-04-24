@@ -19,6 +19,7 @@ export function DeleteNodeModal(props: DeleteNodeProps) {
     const handleConfirm = () => {
         refetch()
         handleClose()
+        window.location.reload() //TODO: reload tree component instead of whole page
     }
 
     return (
@@ -32,7 +33,7 @@ export function DeleteNodeModal(props: DeleteNodeProps) {
                     <Button variant="secondary" onClick={handleClose}>
                         Anuluj
                     </Button>
-                    <Button variant="primary" onClick={handleConfirm}>
+                    <Button variant="danger" onClick={handleConfirm}>
                         Potwierdź
                     </Button>
                 </Modal.Footer>
