@@ -2,12 +2,14 @@ package net.mnowicki.familia.domain.family;
 
 import net.mnowicki.familia.domain.NodeConverter;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
+import net.mnowicki.familia.domain.person.dto.CreateChildDto;
 import net.mnowicki.familia.model.graph.nodes.FamilyNode;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
 import net.mnowicki.familia.model.graph.repositories.FamilyRepository;
 import net.mnowicki.familia.model.graph.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -47,7 +49,31 @@ public class FamilyService {
         return converter.toFamilyDto(family);
     }
 
-    public FamilyDto addChildToPerson(long parentId, long childId) {
+    @Transactional
+    public FamilyDto createChild(long parentId, CreateChildDto dto) {
+        var parent = personRepository.findOrThrow(parentId);
+        var child = personRepository.save(PersonNode.builder()
+                .firstName(dto.firstName())
+                .middleName(dto.middleName())
+                .lastName(dto.lastName())
+                .maidenName(dto.maidenName())
+                .gender(dto.gender())
+                .dateOfBirth(dto.dateOfBirth())
+                .dateOfDeath(dto.dateOfDeath())
+                .description(dto.description())
+                .build());
+
+        var family = FamilyNode.builder()
+                .parents(Set.of(parent))
+                .children(Set.of(child))
+                .build();
+        familyRepository.save(family);
+
+        return converter.toFamilyDto(family);
+    }
+
+    //replaced with child creation on adding to parent
+    public FamilyDto addChild(long parentId, long childId) {
         var parent = personRepository.findOrThrow(parentId);
         var child = personRepository.findOrThrow(childId);
         assertPersonsNotAlreadyInFamily(parent, child);

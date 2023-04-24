@@ -25,6 +25,7 @@ dependencies {
 	implementation "javax.validation:validation-api:$validationApiVersion"
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
 	implementation 'org.liquibase:liquibase-core'
+	implementation "commons-io:commons-io:$commonsIoVersion"
 	compileOnly "org.projectlombok:lombok:$lombokVersion"
 	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

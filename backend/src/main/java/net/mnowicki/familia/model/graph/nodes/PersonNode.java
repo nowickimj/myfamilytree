@@ -18,8 +18,10 @@ public class PersonNode extends BaseNode {
     private String firstName;
     private String middleName;
     private String lastName;
+    private String maidenName;
     private LocalDate dateOfBirth;
     private LocalDate dateOfDeath;
     private Gender gender;
+    private String description;
 
 }

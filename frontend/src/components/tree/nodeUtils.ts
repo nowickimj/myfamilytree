@@ -1,4 +1,4 @@
-import {GetNodeDetailsResponse} from "../../PersonApi";
+import {PersonDto} from "../../PersonApi";
 
 export function formatNullableNodeStringProperty(property: string | undefined): string {
     return property ?? "-"
@@ -18,17 +18,17 @@ function formatMonthDay(property: string): string {
     return property.length == 2 ? property : "0" + property;
 }
 
-export interface NodeDetailsProperty {
+export interface PersonProperty {
     idx: number,
     name: string,
     value?: string
 }
 
-export function getNodeDetailsProperties(node: GetNodeDetailsResponse | undefined): NodeDetailsProperty[] {
+export function getPersonProperties(node: PersonDto | undefined): PersonProperty[] {
     if (!node) {
         return []
     }
-    const properties: NodeDetailsProperty[] = [
+    const properties: PersonProperty[] = [
         {idx: 0, name: "Imię", value: formatNullableNodeStringProperty(node.firstName)},
         {idx: 2, name: "Nazwisko", value: formatNullableNodeStringProperty(node.lastName)},
         {idx: 4, name: "Data urodzenia", value: formatNullableNodeDateProperty(node.dateOfBirth)}

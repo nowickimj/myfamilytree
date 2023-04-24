@@ -2,6 +2,7 @@ package net.mnowicki.familia.domain.person;
 
 import net.mnowicki.familia.domain.family.FamilyService;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
+import net.mnowicki.familia.domain.person.dto.CreateChildDto;
 import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
 import net.mnowicki.familia.domain.person.dto.PersonDto;
 import net.mnowicki.familia.domain.person.dto.UpdatePersonDto;
@@ -11,6 +12,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -52,9 +54,9 @@ public class PersonController {
         return familyService.addPartner(partnerId1, partnerId2);
     }
 
-    @PostMapping("/{id}/children/{childId}")
-    public FamilyDto addChild(@NotNull @PathVariable("id") long parentId, @NotNull @PathVariable("childId") long childId) {
-        return familyService.addChildToPerson(parentId, childId);
+    @PostMapping("/{id}/children")
+    public FamilyDto createChild(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateChildDto dto) {
+        return familyService.createChild(parentId, dto);
     }
 
     @DeleteMapping("/{id}")

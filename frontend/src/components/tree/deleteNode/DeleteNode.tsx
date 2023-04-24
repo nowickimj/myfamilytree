@@ -28,7 +28,10 @@ export function DeleteNodeModal(props: DeleteNodeProps) {
                 <Modal.Header closeButton>
                     <Modal.Title>Potwierdź operację</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Czy na pewno chcesz usunąć "{props.fullName}" z drzewa?</Modal.Body>
+                <Modal.Body>
+                    Czy na pewno chcesz usunąć "{props.fullName}" z drzewa?
+                    Operacji nie da się cofnąć.
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Anuluj

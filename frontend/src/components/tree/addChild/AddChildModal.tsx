@@ -28,7 +28,7 @@ export function AddChildModal(props: AddChildModal) {
     const [dateOfDeath, setDateOfDeath] = useState<string | null>(null)
     const [description, setDescription] = useState<string | null>(null)
 
-    const request = {
+    const request: AddChildRequest = {
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,
@@ -37,38 +37,43 @@ export function AddChildModal(props: AddChildModal) {
         dateOfBirth: dateOfBirth,
         dateOfDeath: dateOfDeath,
         description: description
-    } as AddChildRequest
+    }
 
-    const {refetch} = useQuery({...personApi.addChild(props.nodeId, request), enabled: false})
+    const {refetch} = useQuery({...personApi.createChild(props.nodeId, request), enabled: false})
 
     const handleConfirm = () => {
-        console.log(JSON.stringify(request))
-
-        //handleClose()
-
+        console.log("Adding new child to " + props.nodeId + ": " + JSON.stringify(request))
+        const result = refetch()
+        result.then((result) => {
+            if(result == null) {
+                console.log("error caught")
+            } else {
+                handleClose()
+            }
+        })
     }
 
     return (
         <>
             <Modal show={true} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Dodaj potomka</Modal.Title>
+                    <Modal.Title>Utwórz potomka</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Label>Płeć</Form.Label>
-                        <Form.Select onChange={(e) => setGender(e.target.value)}>
+                        <Form.Label>Płeć*</Form.Label>
+                        <Form.Select onChange={(e) => setGender(e.target.value)} defaultChecked={true}>
                             <option value="female">Kobieta</option>
                             <option value="male">Mężczyzna</option>
                         </Form.Select>
 
-                        <Form.Label>Imię</Form.Label>
+                        <Form.Label>Imię*</Form.Label>
                         <Form.Control type="text" onChange={(e) => setFirstName(e.target.value)}/>
 
                         <Form.Label>Drugie imię</Form.Label>
                         <Form.Control type="text" onChange={(e) => setMiddleName(e.target.value)}/>
 
-                        <Form.Label>Nazwisko</Form.Label>
+                        <Form.Label>Nazwisko*</Form.Label>
                         <Form.Control type="text" onChange={(e) => setLastName(e.target.value)}/>
 
                         <Form.Label>Nazwisko panieńskie</Form.Label>
@@ -85,6 +90,7 @@ export function AddChildModal(props: AddChildModal) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
+                    Pola wymagane oznaczone gwiazdką (*).
                     <Button variant="secondary" onClick={handleClose}>
                         Anuluj
                     </Button>

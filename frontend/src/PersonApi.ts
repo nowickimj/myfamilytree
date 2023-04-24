@@ -2,27 +2,34 @@ import axios from "axios";
 
 const BASE_API = "http://localhost:8080/api"
 
-export interface GetNodeDetailsResponse {
-    firstName?: string,
-    lastName?: string,
+export interface PersonDto {
+    id: number,
+    firstName: string,
+    lastName: string,
     middleName?: string,
     maidenName?: string,
     dateOfBirth?: number[],
     dateOfDeath?: number[],
-    description: string,
+    description?: string
     attachments: string[]
 }
 
+export interface FamilyDto {
+    id: number,
+    parents: PersonDto[],
+    children: PersonDto[]
+}
+
 export interface AddChildRequest {
-    coParentId?: string,
-    firstName: string,
-    lastName: string,
-    gender: string,
-    middleName?: string,
-    maidenName?: string,
-    dateOfBirth?: string,
-    dateOfDeath?: string,
-    description?: string
+    coParentId?: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    gender: string | null,
+    middleName: string | null,
+    maidenName: string | null,
+    dateOfBirth: string | null,
+    dateOfDeath: string | null,
+    description: string | null
 }
 
 export default class PersonApi {
@@ -30,7 +37,7 @@ export default class PersonApi {
     public getPerson(nodeId: string) {
         return {
             queryKey: ["getNodeDetails", nodeId],
-            queryFn: async (): Promise<GetNodeDetailsResponse> => {
+            queryFn: async (): Promise<PersonDto> => {
                 const {data} = await axios.get(
                     BASE_API + "/persons/" + nodeId
                 );
@@ -54,15 +61,15 @@ export default class PersonApi {
         }
     }
 
-    public addChild(nodeId: string, request: AddChildRequest) {
+    public createChild(nodeId: string, request: AddChildRequest) {
         return {
             queryKey: ["addChild", nodeId],
-            queryFn: async (): Promise<boolean> => {
+            queryFn: async (): Promise<FamilyDto> => {
                 const {data} = await axios.post(
-                    BASE_API + "/persons/" + nodeId + "children",
+                    BASE_API + "/persons/" + nodeId + "/children",
                     request
                 );
-                return true;
+                return data;
             },
             options: {
                 manual: true
