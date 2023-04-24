@@ -32,7 +32,7 @@ export interface AddChildRequest {
     description: string | null
 }
 
-export default class PersonApi {
+export default class ApiQueries {
 
     public getPerson(nodeId: string) {
         return {
@@ -50,7 +50,7 @@ export default class PersonApi {
         return {
             queryKey: ["deletePerson", nodeId],
             queryFn: async (): Promise<boolean> => {
-                const {data} = await axios.delete(
+                await axios.delete(
                     BASE_API + "/persons/" + nodeId
                 );
                 return true;

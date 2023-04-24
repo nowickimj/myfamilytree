@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import PersonApi from "../../../PersonApi";
+import ApiQueries from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 
-const personApi = new PersonApi()
+const personApi = new ApiQueries()
 
-export interface DeleteNodeProps {
+export interface DeletePersonProps {
     setShow: (current: boolean) => void,
     nodeId: string,
     fullName: string
 }
 
-export function DeleteNodeModal(props: DeleteNodeProps) {
+export function DeletePersonModal(props: DeletePersonProps) {
     const handleClose = () => props.setShow(false);
 
     const {refetch} = useQuery({...personApi.deletePerson(props.nodeId), enabled: false})

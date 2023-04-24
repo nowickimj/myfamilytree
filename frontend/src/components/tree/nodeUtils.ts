@@ -1,4 +1,4 @@
-import {PersonDto} from "../../PersonApi";
+import {PersonDto} from "../../ApiQueries";
 
 export function formatNullableNodeStringProperty(property: string | undefined): string {
     return property ?? "-"

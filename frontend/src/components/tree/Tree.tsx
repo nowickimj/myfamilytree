@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import ReactFamilyTree from 'react-family-tree'
 import {FamilyNode} from "./node/FamilyNode"
 import {NODE_HEIGHT, NODE_WIDTH, NodeDto} from "./const"
-import {NodeDetails} from "./nodeDetails/NodeDetails"
+import {PersonDetails} from "./person/personDetails/PersonDetails"
 import css from "./Tree.module.css"
 import {useQuery} from "@tanstack/react-query"
 import axios from "axios";
@@ -65,7 +65,7 @@ export default function Tree() {
             }}
         />
         {selectedNode && (
-            <NodeDetails
+            <PersonDetails
                 nodeId={selectedNode}
                 className={css.details}
                 onSelect={selectNode}

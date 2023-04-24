@@ -1,17 +1,17 @@
 import React, {memo, MouseEventHandler, useCallback, useState} from 'react';
-import css from './NodeDetails.module.css';
+import css from './PersonDetails.module.css';
 import {useQuery} from "@tanstack/react-query";
-import {getPersonProperties} from "../nodeUtils";
+import {getPersonProperties} from "../../nodeUtils";
 import ReactImageFallback from "react-image-fallback";
-import defaultAvatar from "../../../assets/default-avatar.jpg";
+import defaultAvatar from "../../../../assets/default-avatar.jpg";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import PersonApi from "../../../PersonApi";
-import {DeleteNodeModal} from "../deleteNode/DeleteNode";
-import {AddChildModal} from "../addChild/AddChildModal";
+import ApiQueries from "../../../../ApiQueries";
+import {DeletePersonModal} from "../deletePerson/DeletePerson";
+import {CreateChildModal} from "../addChild/CreateChildModal";
 
-const personApi = new PersonApi()
+const personApi = new ApiQueries()
 
-interface NodeDetailsProps {
+interface PersonDetailsProps {
     nodeId: string;
     className?: string;
     onSelect: (nodeId: string | undefined) => void;
@@ -19,8 +19,8 @@ interface NodeDetailsProps {
     onClear?: () => void;
 }
 
-export const NodeDetails = memo(
-    function NodeDetails({nodeId, className, ...props}: NodeDetailsProps) {
+export const PersonDetails = memo(
+    function PersonDetails({nodeId, className, ...props}: PersonDetailsProps) {
         const [show, setShow] = useState(nodeId !== null);
         const handleClose = useCallback(() => {
             setShow(false)
@@ -108,9 +108,9 @@ export const NodeDetails = memo(
                 </Offcanvas>
 
 
-                {isDeleteModalShown && (<DeleteNodeModal setShow={setShowDeleteModal} nodeId={nodeId}
-                                                         fullName={data?.firstName + " " + data?.lastName}/>)}
-                {isAddChildModalShown && (<AddChildModal setShow={setShowAddChildModal} nodeId={nodeId}/>)}
+                {isDeleteModalShown && (<DeletePersonModal setShow={setShowDeleteModal} nodeId={nodeId}
+                                                           fullName={data?.firstName + " " + data?.lastName}/>)}
+                {isAddChildModalShown && (<CreateChildModal setShow={setShowAddChildModal} nodeId={nodeId}/>)}
             </>
         );
     },

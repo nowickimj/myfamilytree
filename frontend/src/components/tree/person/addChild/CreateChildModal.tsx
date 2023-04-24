@@ -2,17 +2,17 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form} from "react-bootstrap";
-import PersonApi, {AddChildRequest} from "../../../PersonApi";
+import ApiQueries, {AddChildRequest} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 
-const personApi = new PersonApi()
+const personApi = new ApiQueries()
 
-export interface AddChildModal {
+export interface CreateChildModal {
     setShow: (current: boolean) => void,
     nodeId: string
 }
 
-export function AddChildModal(props: AddChildModal) {
+export function CreateChildModal(props: CreateChildModal) {
     const handleClose = () => props.setShow(false);
 
     function handleSubmit() {
