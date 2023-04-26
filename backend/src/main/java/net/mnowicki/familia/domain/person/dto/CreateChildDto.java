@@ -2,9 +2,10 @@ package net.mnowicki.familia.domain.person.dto;
 
 import net.mnowicki.familia.model.Gender;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-public record CreateChildDto(String coParentId, String firstName, String middleName, String lastName,
+public record CreateChildDto(Long coParentId, String firstName, String middleName, String lastName,
                              String maidenName, LocalDate dateOfBirth, LocalDate dateOfDeath,
-                             Gender gender, String description) {
+                             @NotNull Gender gender, String description) {
 }

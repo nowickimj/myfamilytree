@@ -3,6 +3,7 @@ package net.mnowicki.familia.domain.family;
 import net.mnowicki.familia.domain.NodeConverter;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import net.mnowicki.familia.domain.person.dto.CreateChildDto;
+import net.mnowicki.familia.domain.person.dto.CreateParentDto;
 import net.mnowicki.familia.model.graph.nodes.FamilyNode;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
 import net.mnowicki.familia.model.graph.repositories.FamilyRepository;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -63,10 +66,41 @@ public class FamilyService {
                 .description(dto.description())
                 .build());
 
-        var family = FamilyNode.builder()
-                .parents(Set.of(parent))
+        var family = Optional.ofNullable(dto.coParentId()).map(personRepository::findOrThrow)
+                .map(coParent -> familyRepository.findPartnersFamily(parentId, coParent.getId())
+                            .orElseGet(() -> FamilyNode.builder()
+                                    .parents(Set.of(parent, coParent))
+                                    .build()))
+                .orElseGet(() -> FamilyNode.builder()
+                            .parents(Set.of(parent))
+                            .build());
+
+        family.addChild(child);
+        familyRepository.save(family);
+
+        return converter.toFamilyDto(family);
+    }
+
+    @Transactional
+    public FamilyDto createParent(long childId, CreateParentDto dto) {
+        var child = personRepository.findOrThrow(childId);
+        var family = familyRepository.findAscendingFamily(childId).map(existingFamily -> {
+            assertParentsCountLimitNotReached(existingFamily);
+            return existingFamily;
+        }).orElseGet(() -> FamilyNode.builder()
                 .children(Set.of(child))
-                .build();
+                .build());
+        var parent = personRepository.save(PersonNode.builder()
+                .firstName(dto.firstName())
+                .middleName(dto.middleName())
+                .lastName(dto.lastName())
+                .maidenName(dto.maidenName())
+                .gender(dto.gender())
+                .description(dto.description())
+                .dateOfBirth(dto.dateOfBirth())
+                .dateOfDeath(dto.dateOfDeath())
+                .build());
+        family.addParent(parent);
         familyRepository.save(family);
 
         return converter.toFamilyDto(family);
@@ -99,9 +133,7 @@ public class FamilyService {
 
     public void addParentToFamily(long familyId, long parentId) {
         var family = familyRepository.findOrThrow(familyId);
-        if (family.getParents().size() > 1) {
-            throw new FamilyCreationException("Maximum number of parents already assigned to family.");
-        }
+        assertParentsCountLimitNotReached(family);
         var parent = personRepository.findOrThrow(parentId);
         family.addParent(parent);
 
@@ -119,4 +151,11 @@ public class FamilyService {
             throw new FamilyCreationException("Child with id %s is already assigned to family with id %s", Long.toString(childId), existingFamily.idAsString());
         });
     }
+
+    private void assertParentsCountLimitNotReached(FamilyNode family) {
+        if (family.getParents().size() > 1) {
+            throw new FamilyCreationException("Maximum number of parents already assigned to family.");
+        }
+    }
+
 }

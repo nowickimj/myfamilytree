@@ -2,10 +2,7 @@ package net.mnowicki.familia.domain.person;
 
 import net.mnowicki.familia.domain.family.FamilyService;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
-import net.mnowicki.familia.domain.person.dto.CreateChildDto;
-import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
-import net.mnowicki.familia.domain.person.dto.PersonDto;
-import net.mnowicki.familia.domain.person.dto.UpdatePersonDto;
+import net.mnowicki.familia.domain.person.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -57,6 +54,11 @@ public class PersonController {
     @PostMapping("/{id}/children")
     public FamilyDto createChild(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateChildDto dto) {
         return familyService.createChild(parentId, dto);
+    }
+
+    @PostMapping("/{id}/parents")
+    public FamilyDto createParent(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateParentDto dto) {
+        return familyService.createParent(parentId, dto);
     }
 
     @DeleteMapping("/{id}")
