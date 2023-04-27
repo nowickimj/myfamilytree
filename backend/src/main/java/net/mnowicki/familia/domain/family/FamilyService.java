@@ -4,6 +4,7 @@ import net.mnowicki.familia.domain.NodeConverter;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import net.mnowicki.familia.domain.person.dto.CreateChildDto;
 import net.mnowicki.familia.domain.person.dto.CreateParentDto;
+import net.mnowicki.familia.domain.person.dto.PersonDto;
 import net.mnowicki.familia.model.graph.nodes.FamilyNode;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
 import net.mnowicki.familia.model.graph.repositories.FamilyRepository;
@@ -12,9 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class FamilyService {
@@ -55,6 +57,14 @@ public class FamilyService {
     @Transactional
     public FamilyDto createChild(long parentId, CreateChildDto dto) {
         var parent = personRepository.findOrThrow(parentId);
+        var family = Optional.ofNullable(dto.coParentId()).map(personRepository::findOrThrow)
+                .map(coParent -> familyRepository.findPartnersFamily(parentId, coParent.getId())
+                        .orElseGet(() -> FamilyNode.builder()
+                                .parents(Set.of(parent, coParent))
+                                .build()))
+                .orElseGet(() -> FamilyNode.builder()
+                        .parents(Set.of(parent))
+                        .build());
         var child = personRepository.save(PersonNode.builder()
                 .firstName(dto.firstName())
                 .middleName(dto.middleName())
@@ -65,20 +75,20 @@ public class FamilyService {
                 .dateOfDeath(dto.dateOfDeath())
                 .description(dto.description())
                 .build());
-
-        var family = Optional.ofNullable(dto.coParentId()).map(personRepository::findOrThrow)
-                .map(coParent -> familyRepository.findPartnersFamily(parentId, coParent.getId())
-                            .orElseGet(() -> FamilyNode.builder()
-                                    .parents(Set.of(parent, coParent))
-                                    .build()))
-                .orElseGet(() -> FamilyNode.builder()
-                            .parents(Set.of(parent))
-                            .build());
-
         family.addChild(child);
         familyRepository.save(family);
 
         return converter.toFamilyDto(family);
+    }
+
+    public Set<PersonDto> getParents(long childId) {
+        personRepository.findOrThrow(childId);
+        return familyRepository.findAscendingFamily(childId)
+                .map(FamilyNode::getParents)
+                .orElse(Collections.emptySet())
+                .stream()
+                .map(converter::toPersonDto)
+                .collect(Collectors.toSet());
     }
 
     @Transactional

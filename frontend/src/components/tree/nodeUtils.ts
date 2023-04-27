@@ -1,5 +1,15 @@
 import {PersonDto} from "../../ApiQueries";
 
+export function formatPersonName<T extends {
+    firstName?: string,
+    middleName?: string,
+    lastName?: string
+}>(o: T): string {
+    return o.firstName ?? ""
+        + " " + (o.middleName ? o.middleName + " " : "")
+        + o.lastName ?? ""
+}
+
 export function formatNullableNodeStringProperty(property: string | undefined): string {
     return property ?? "-"
 }

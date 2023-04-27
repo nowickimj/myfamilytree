@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/persons")
@@ -54,6 +55,11 @@ public class PersonController {
     @PostMapping("/{id}/children")
     public FamilyDto createChild(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateChildDto dto) {
         return familyService.createChild(parentId, dto);
+    }
+
+    @GetMapping("/{id}/parents")
+    public Set<PersonDto> getParents(@NotNull @PathVariable("id") long childId) {
+        return familyService.getParents(childId);
     }
 
     @PostMapping("/{id}/parents")

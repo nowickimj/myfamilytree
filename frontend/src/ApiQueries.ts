@@ -21,7 +21,7 @@ export interface FamilyDto {
 }
 
 export interface AddChildRequest {
-    coParentId?: string | null,
+    coParentId?: number | null,
     firstName: string | null,
     lastName: string | null,
     gender: string | null,
@@ -42,6 +42,21 @@ export default class ApiQueries {
                     BASE_API + "/persons/" + nodeId
                 );
                 return data;
+            }
+        }
+    }
+
+    public getParents(id: string) {
+        return {
+            queryKey: ["getParents", id],
+            queryFn: async (): Promise<PersonDto[]> => {
+                const {data} = await axios.get(
+                    BASE_API + "/persons/" + id + "/parents"
+                );
+                return data;
+            },
+            options: {
+                manual: true
             }
         }
     }

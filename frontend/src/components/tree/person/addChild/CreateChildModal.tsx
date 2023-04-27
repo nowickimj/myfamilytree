@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useCallback, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import {Form} from "react-bootstrap";
-import ApiQueries, {AddChildRequest} from "../../../../ApiQueries";
+import {Form, FormCheck} from "react-bootstrap";
+import ApiQueries, {AddChildRequest, PersonDto} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
+import {formatPersonName} from "../../nodeUtils";
 
 const personApi = new ApiQueries()
 
@@ -28,7 +29,12 @@ export function CreateChildModal(props: CreateChildModal) {
     const [dateOfDeath, setDateOfDeath] = useState<string | null>(null)
     const [description, setDescription] = useState<string | null>(null)
 
-    const request: AddChildRequest = {
+    const [coParentSelected, setCoParentSelected] = useState(false)
+    const [selectedCoParentId, setSelectedCoParentId] = useState<number | null>(null)
+    const handleCoParentSelected = () => setCoParentSelected(!coParentSelected)
+
+    const addChildRequest: AddChildRequest = {
+        coParentId: selectedCoParentId,
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,
@@ -39,11 +45,18 @@ export function CreateChildModal(props: CreateChildModal) {
         description: description
     }
 
-    const {refetch} = useQuery({...personApi.createChild(props.nodeId, request), enabled: false})
+    const callCreateChild = useQuery({...personApi.createChild(props.nodeId, addChildRequest), enabled: false}).refetch
+    const getParentsResult = useQuery({...personApi.getParents(props.nodeId)}).data
+
+    function getSelectableCoParents(): PersonDto[] {
+        let result = getParentsResult ?? []
+        return result.filter(parent => parent.id.toString() !== props.nodeId)
+    }
+
 
     const handleConfirm = () => {
-        console.log("Adding new child to " + props.nodeId + ": " + JSON.stringify(request))
-        const result = refetch()
+        console.log("Adding new child to " + props.nodeId + ": " + JSON.stringify(addChildRequest))
+        const result = callCreateChild()
         result.then((result) => {
             if(result == null) {
                 console.log("error caught")
@@ -61,8 +74,27 @@ export function CreateChildModal(props: CreateChildModal) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
+                        <Form.Check
+                            id="coParentSelected"
+                            label="Uwzględnij drugiego rodzica"
+                            onClick={handleCoParentSelected}
+                            checked={coParentSelected}
+                            disabled={getSelectableCoParents.length == 0}
+                        />
+
+                        {coParentSelected && (
+                            <Form.Select onChange={(e) => {
+                                const selectedCoParentId = getSelectableCoParents().find((parent) => parent.id.toString() !== e.target.value)
+                                setSelectedCoParentId(selectedCoParentId?.id || null)
+                            }}>
+                                {
+                                    getSelectableCoParents().map((parent) => <option value={parent.id}>{formatPersonName(parent)}</option>)
+                                }
+                            </Form.Select>
+                        )}
+
                         <Form.Label>Płeć*</Form.Label>
-                        <Form.Select onChange={(e) => setGender(e.target.value)} defaultChecked={true}>
+                        <Form.Select onChange={(e) => setGender(e.target.value)} defaultValue="female">
                             <option value="female">Kobieta</option>
                             <option value="male">Mężczyzna</option>
                         </Form.Select>
