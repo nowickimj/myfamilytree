@@ -9,7 +9,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
@@ -60,6 +59,11 @@ public class PersonController {
     @GetMapping("/{id}/parents")
     public Set<PersonDto> getParents(@NotNull @PathVariable("id") long childId) {
         return familyService.getParents(childId);
+    }
+
+    @GetMapping("/{id}/descending")
+    public Set<FamilyDto> getDescendingFamilies(@NotNull @PathVariable("id") long id) {
+        return familyService.getDescendingFamilies(id);
     }
 
     @PostMapping("/{id}/parents")

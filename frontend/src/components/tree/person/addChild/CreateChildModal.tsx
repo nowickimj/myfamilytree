@@ -2,11 +2,12 @@ import React, {ChangeEvent, useCallback, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form, FormCheck} from "react-bootstrap";
-import ApiQueries, {AddChildRequest, PersonDto} from "../../../../ApiQueries";
+import ApiQueries, {AddChildRequest, FamilyDto, PersonDto} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
-import {formatPersonName} from "../../nodeUtils";
+import {formatFamilyName, formatPersonName} from "../../nodeUtils";
 
 const personApi = new ApiQueries()
+const DEFAULT_GENDER = "female"
 
 export interface CreateChildModal {
     setShow: (current: boolean) => void,
@@ -24,17 +25,16 @@ export function CreateChildModal(props: CreateChildModal) {
     const [middleName, setMiddleName] = useState<string | null>(null)
     const [lastName, setLastName] = useState<string | null>(null)
     const [maidenName, setMaidenName] = useState<string | null>(null)
-    const [gender, setGender] = useState<string | null>(null)
+    const [gender, setGender] = useState(DEFAULT_GENDER)
     const [dateOfBirth, setDateOfBirth] = useState<string | null>(null)
     const [dateOfDeath, setDateOfDeath] = useState<string | null>(null)
     const [description, setDescription] = useState<string | null>(null)
 
-    const [coParentSelected, setCoParentSelected] = useState(false)
-    const [selectedCoParentId, setSelectedCoParentId] = useState<number | null>(null)
-    const handleCoParentSelected = () => setCoParentSelected(!coParentSelected)
+    const [addToExistingFamilySelected, setAddToExistingFamilySelected] = useState(false)
+    const [selectedFamily, setSelectedFamily] = useState<number | null>(null)
 
     const addChildRequest: AddChildRequest = {
-        coParentId: selectedCoParentId,
+        familyId: selectedFamily,
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,
@@ -46,13 +46,7 @@ export function CreateChildModal(props: CreateChildModal) {
     }
 
     const callCreateChild = useQuery({...personApi.createChild(props.nodeId, addChildRequest), enabled: false}).refetch
-    const getParentsResult = useQuery({...personApi.getParents(props.nodeId)}).data
-
-    function getSelectableCoParents(): PersonDto[] {
-        let result = getParentsResult ?? []
-        return result.filter(parent => parent.id.toString() !== props.nodeId)
-    }
-
+    const descendingFamilies: FamilyDto[] = useQuery({...personApi.getDescendingFamilies(props.nodeId)}).data ?? []
 
     const handleConfirm = () => {
         console.log("Adding new child to " + props.nodeId + ": " + JSON.stringify(addChildRequest))
@@ -75,26 +69,26 @@ export function CreateChildModal(props: CreateChildModal) {
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                         <Form.Check
-                            id="coParentSelected"
-                            label="Uwzględnij drugiego rodzica"
-                            onClick={handleCoParentSelected}
-                            checked={coParentSelected}
-                            disabled={getSelectableCoParents.length == 0}
+                            id="existingFamilySelected"
+                            label="Dodaj do istniejącej rodziny"
+                            onClick={(e) => setAddToExistingFamilySelected(!addToExistingFamilySelected)}
+                            checked={addToExistingFamilySelected}
+                            disabled={descendingFamilies.length === 0}
                         />
 
-                        {coParentSelected && (
+                        {addToExistingFamilySelected && (
                             <Form.Select onChange={(e) => {
-                                const selectedCoParentId = getSelectableCoParents().find((parent) => parent.id.toString() !== e.target.value)
-                                setSelectedCoParentId(selectedCoParentId?.id || null)
+                                const selectedFamily = descendingFamilies.find((family) => family.id.toString() !== e.target.value)
+                                setSelectedFamily(selectedFamily?.id || null)
                             }}>
                                 {
-                                    getSelectableCoParents().map((parent) => <option value={parent.id}>{formatPersonName(parent)}</option>)
+                                    descendingFamilies.map((family) => <option value={family.id}>{formatFamilyName(family)}</option>)
                                 }
                             </Form.Select>
                         )}
 
                         <Form.Label>Płeć*</Form.Label>
-                        <Form.Select onChange={(e) => setGender(e.target.value)} defaultValue="female">
+                        <Form.Select onChange={(e) => setGender(e.target.value)} defaultValue={DEFAULT_GENDER}>
                             <option value="female">Kobieta</option>
                             <option value="male">Mężczyzna</option>
                         </Form.Select>

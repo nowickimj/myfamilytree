@@ -1,4 +1,4 @@
-import {PersonDto} from "../../ApiQueries";
+import {FamilyDto, PersonDto} from "../../ApiQueries";
 
 export function formatPersonName<T extends {
     firstName?: string,
@@ -8,6 +8,13 @@ export function formatPersonName<T extends {
     return o.firstName ?? ""
         + " " + (o.middleName ? o.middleName + " " : "")
         + o.lastName ?? ""
+}
+
+export function formatFamilyName(family: FamilyDto): string {
+    let result = []
+    result.push(family.parents.map(formatPersonName).join(", "))
+    result.push(family.children.map(formatPersonName).join(", "))
+    return result.join(", ")
 }
 
 export function formatNullableNodeStringProperty(property: string | undefined): string {

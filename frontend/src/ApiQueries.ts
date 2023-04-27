@@ -21,7 +21,7 @@ export interface FamilyDto {
 }
 
 export interface AddChildRequest {
-    coParentId?: number | null,
+    familyId?: number | null,
     firstName: string | null,
     lastName: string | null,
     gender: string | null,
@@ -83,6 +83,21 @@ export default class ApiQueries {
                 const {data} = await axios.post(
                     BASE_API + "/persons/" + nodeId + "/children",
                     request
+                );
+                return data;
+            },
+            options: {
+                manual: true
+            }
+        }
+    }
+
+    public getDescendingFamilies(nodeId: string) {
+        return {
+            queryKey: ["getDescendingFamilies", nodeId],
+            queryFn: async (): Promise<FamilyDto[]> => {
+                const {data} = await axios.get(
+                    BASE_API + "/persons/" + nodeId + "/descending"
                 );
                 return data;
             },

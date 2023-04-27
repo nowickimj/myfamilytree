@@ -57,11 +57,8 @@ public class FamilyService {
     @Transactional
     public FamilyDto createChild(long parentId, CreateChildDto dto) {
         var parent = personRepository.findOrThrow(parentId);
-        var family = Optional.ofNullable(dto.coParentId()).map(personRepository::findOrThrow)
-                .map(coParent -> familyRepository.findPartnersFamily(parentId, coParent.getId())
-                        .orElseGet(() -> FamilyNode.builder()
-                                .parents(Set.of(parent, coParent))
-                                .build()))
+        var family = Optional.ofNullable(dto.familyId())
+                .map(familyRepository::findOrThrow)
                 .orElseGet(() -> FamilyNode.builder()
                         .parents(Set.of(parent))
                         .build());
@@ -79,6 +76,12 @@ public class FamilyService {
         familyRepository.save(family);
 
         return converter.toFamilyDto(family);
+    }
+
+    public Set<FamilyDto> getDescendingFamilies(long personId) {
+        return familyRepository.findDescendingFamilies(personId).stream()
+                .map(converter::toFamilyDto)
+                .collect(Collectors.toSet());
     }
 
     public Set<PersonDto> getParents(long childId) {
