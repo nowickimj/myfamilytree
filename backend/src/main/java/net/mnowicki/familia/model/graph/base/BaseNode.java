@@ -10,7 +10,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id"})
 public abstract class BaseNode {
 
     @Id

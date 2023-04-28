@@ -1,6 +1,7 @@
 package net.mnowicki.familia.domain.family;
 
 import net.mnowicki.familia.domain.NodeConverter;
+import net.mnowicki.familia.domain.exception.FamilyCreationException;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import net.mnowicki.familia.domain.person.dto.CreateChildDto;
 import net.mnowicki.familia.domain.person.dto.CreateParentDto;

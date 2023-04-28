@@ -1,7 +1,8 @@
 package net.mnowicki.familia.config;
 
 import jakarta.servlet.http.HttpServletRequest;
-import net.mnowicki.familia.domain.family.FamilyCreationException;
+import net.mnowicki.familia.domain.exception.BadRequestException;
+import net.mnowicki.familia.domain.exception.FamilyCreationException;
 import net.mnowicki.familia.exception.NodeNotFoundException;
 import net.mnowicki.familia.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,8 @@ public class ApiExceptionHandler {
                 .body(buildErrorResponse(e.getMessage(), request.getRequestURI()));
     }
 
-    @ExceptionHandler({FamilyCreationException.class})
-    public <E extends RuntimeException> ResponseEntity<ErrorApiResponse> handleBadRequest(final HttpServletRequest request, final E e) {
+    @ExceptionHandler({BadRequestException.class})
+    public <E extends BadRequestException> ResponseEntity<ErrorApiResponse> handleBadRequest(final HttpServletRequest request, final E e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(buildErrorResponse(e.getMessage(), request.getRequestURI()));
     }
