@@ -8,6 +8,8 @@ import {useQuery} from "@tanstack/react-query"
 import axios from "axios";
 import {ExtNode} from "relatives-tree/lib/types";
 
+
+const DEFAULT_ROOT_ID = "0"
 const BASE_API = "http://localhost:8080/api"
 
 interface GetTreeResponse {
@@ -25,8 +27,8 @@ export default function Tree() {
     })
 
     const nodes: NodeDto[] = data?.nodes ?? []
-    const [rootId, setRootId] = React.useState("2")
-    const [selectedNode, selectNode] = useState<string>()
+    const [rootId, setRootId] = React.useState(data?.rootId ?? DEFAULT_ROOT_ID)
+    const [selectedNode, setSelectedNode] = useState<NodeDto>()
 
     if (nodes.length == 0) {
         return <div>
@@ -59,16 +61,16 @@ export default function Tree() {
                             transform: `translate(${n.left * (NODE_WIDTH / 2)}px, ${n.top * (NODE_HEIGHT / 2)}px)`
                         }}
                         isRoot={n.id === rootId}
-                        onClick={selectNode}
+                        onClick={(e) => {setSelectedNode(node)}}
                         onSubClick={setRootId}/>
                 )
             }}
         />
         {selectedNode && (
             <PersonDetails
-                nodeId={selectedNode}
+                node={selectedNode}
                 className={css.details}
-                onSelect={selectNode}
+                onSelect={setSelectedNode}
             />
         )}
     </div>;

@@ -20,7 +20,7 @@ export interface FamilyDto {
     children: PersonDto[]
 }
 
-export interface AddChildRequest {
+export interface CreatePersonRequest {
     familyId?: number | null,
     firstName: string | null,
     lastName: string | null,
@@ -30,6 +30,10 @@ export interface AddChildRequest {
     dateOfBirth: string | null,
     dateOfDeath: string | null,
     description: string | null
+}
+
+export interface CreateChildRequest extends CreatePersonRequest {
+    familyId?: number | null
 }
 
 export default class ApiQueries {
@@ -76,12 +80,28 @@ export default class ApiQueries {
         }
     }
 
-    public createChild(nodeId: string, request: AddChildRequest) {
+    public createChild(nodeId: string, request: CreateChildRequest) {
         return {
             queryKey: ["addChild", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
                 const {data} = await axios.post(
                     BASE_API + "/persons/" + nodeId + "/children",
+                    request
+                );
+                return data;
+            },
+            options: {
+                manual: true
+            }
+        }
+    }
+
+    public createParent(nodeId: string, request: CreatePersonRequest) {
+        return {
+            queryKey: ["addChild", nodeId],
+            queryFn: async (): Promise<FamilyDto> => {
+                const {data} = await axios.post(
+                    BASE_API + "/persons/" + nodeId + "/parents",
                     request
                 );
                 return data;

@@ -8,36 +8,46 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import ApiQueries from "../../../../ApiQueries";
 import {DeletePersonModal} from "../deletePerson/DeletePerson";
 import {CreateChildModal} from "../addChild/CreateChildModal";
+import {CreateParentModal} from "../addParent/CreateParentModal";
+import {NodeDto} from "../../const";
 
 const personApi = new ApiQueries()
 
 interface PersonDetailsProps {
-    nodeId: string;
+    node: NodeDto;
     className?: string;
-    onSelect: (nodeId: string | undefined) => void;
+    onSelect: (node: NodeDto | undefined) => void;
     onHover?: (nodeId: string) => void;
     onClear?: () => void;
 }
 
 export const PersonDetails = memo(
-    function PersonDetails({nodeId, className, ...props}: PersonDetailsProps) {
+    function PersonDetails({node, className, ...props}: PersonDetailsProps) {
+        const nodeId = node.id
+
         const [show, setShow] = useState(nodeId !== null);
         const handleClose = useCallback(() => {
             setShow(false)
             props.onSelect(undefined)
         }, [props]);
 
+
         const {data} = useQuery(personApi.getPerson(nodeId))
         const properties = getPersonProperties(data)
 
+        //show modals
         const [isDeleteModalShown, setShowDeleteModal] = useState(false)
         const [isAddChildModalShown, setShowAddChildModal] = useState(false)
+        const [isAddParentModalShown, setShowAddParentModal] = useState(false)
 
         const handleDelete: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowDeleteModal(isDeleteModalShown => !isDeleteModalShown)
         }
         const handleAddChild: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowAddChildModal(isAddChildModalShown => !isAddChildModalShown)
+        }
+        const handleAddParent: MouseEventHandler<HTMLButtonElement> = (event) => {
+            setShowAddParentModal(isAddParentModalShown => !isAddParentModalShown)
         }
 
         return (
@@ -56,11 +66,6 @@ export const PersonDetails = memo(
                                     <button className="btn btn-secondary  mr-1" onClick={handleDelete}>&#10008; Usuń
                                     </button>
                                     <button className="btn btn-secondary mr-1" onClick={handleClose}>Zamknij</button>
-                                    {/*<button className="btn btn-secondary headerButton" onClick={(event) => {*/}
-                                    {/*    console.log("addParent button clicked")*/}
-                                    {/*}}>*/}
-                                    {/*   Dodaj rodzica*/}
-                                    {/*</button>*/}
                                 </div>
 
                             </Offcanvas.Title>
@@ -75,15 +80,13 @@ export const PersonDetails = memo(
 
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-                        <div className={css.headerButtons}>
-                            <button className="btn btn-secondary mr-1" onClick={handleAddChild}>✚
-                                Dodaj potomka
+                        <div className={css.personOperationButtons}>
+                            <button className="btn btn-secondary mr-1" onClick={handleAddChild}>
+                                ✚ Dodaj potomka
                             </button>
-                            {/*<button className="btn btn-secondary mr-1" onClick={(event) => {*/}
-                            {/*    console.log("addParent button clicked")*/}
-                            {/*}}>*/}
-                            {/*    Dodaj rodzica*/}
-                            {/*</button>*/}
+                            <button className="btn btn-secondary mr-1" onClick={handleAddParent}>
+                                ✚ Dodaj rodzica
+                            </button>
                         </div>
                         <div>
                             <table className="table-light">
@@ -100,6 +103,8 @@ export const PersonDetails = memo(
                             </table>
                             <br/>
                             <p>Opis: -</p>
+                            <br/>
+                            <p>{data?.description ?? ""}</p>
                             <div>
                                 <p>Załączniki: -</p>
                             </div>
@@ -111,6 +116,7 @@ export const PersonDetails = memo(
                 {isDeleteModalShown && (<DeletePersonModal setShow={setShowDeleteModal} nodeId={nodeId}
                                                            fullName={data?.firstName + " " + data?.lastName}/>)}
                 {isAddChildModalShown && (<CreateChildModal setShow={setShowAddChildModal} nodeId={nodeId}/>)}
+                {isAddParentModalShown && (<CreateParentModal setShow={setShowAddParentModal} nodeId={nodeId}/>)}
             </>
         );
     },

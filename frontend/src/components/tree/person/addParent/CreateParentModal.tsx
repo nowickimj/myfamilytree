@@ -2,24 +2,20 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form} from "react-bootstrap";
-import ApiQueries, {CreateChildRequest, CreatePersonRequest, FamilyDto} from "../../../../ApiQueries";
+import ApiQueries, {CreatePersonRequest, FamilyDto} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 import {formatFamilyName} from "../../nodeUtils";
 
 const personApi = new ApiQueries()
 const DEFAULT_GENDER = "female"
 
-export interface CreateChildModal {
+export interface CreateParentModalProps {
     setShow: (current: boolean) => void,
     nodeId: string
 }
 
-export function CreateChildModal(props: CreateChildModal) {
+export function CreateParentModal(props: CreateParentModalProps) {
     const handleClose = () => props.setShow(false);
-
-    function handleSubmit() {
-        console.log("submit clicked!")
-    }
 
     const [firstName, setFirstName] = useState<string | null>(null)
     const [middleName, setMiddleName] = useState<string | null>(null)
@@ -30,14 +26,7 @@ export function CreateChildModal(props: CreateChildModal) {
     const [dateOfDeath, setDateOfDeath] = useState<string | null>(null)
     const [description, setDescription] = useState<string | null>(null)
 
-    // add child to existing family
-    const descendingFamilies: FamilyDto[] = useQuery({...personApi.getDescendingFamilies(props.nodeId)}).data ?? []
-    const [addToExistingFamilySelected, setAddToExistingFamilySelected] = useState(descendingFamilies.length > 0)
-    const DEFAULT_SELECTED_EXISTING_FAMILY: number = descendingFamilies[0]?.id ?? null
-    const [selectedFamily, setSelectedFamily] = useState<number | null>(DEFAULT_SELECTED_EXISTING_FAMILY)
-
-    const addChildRequest: CreateChildRequest = {
-        familyId: selectedFamily,
+    const addParentRequest: CreatePersonRequest = {
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,
@@ -48,11 +37,11 @@ export function CreateChildModal(props: CreateChildModal) {
         description: description
     }
 
-    const callCreateChild = useQuery({...personApi.createChild(props.nodeId, addChildRequest), enabled: false}).refetch
+    const callCreateParent = useQuery({...personApi.createChild(props.nodeId, addParentRequest), enabled: false}).refetch
 
     const handleConfirm = () => {
-        console.log("Adding new child to " + props.nodeId + ": " + JSON.stringify(addChildRequest))
-        const result = callCreateChild()
+        console.log("Adding new parent to " + props.nodeId + ": " + JSON.stringify(addParentRequest))
+        const result = callCreateParent()
         result.then((result) => {
             if (result == null) {
                 console.log("error caught")
@@ -66,39 +55,10 @@ export function CreateChildModal(props: CreateChildModal) {
         <>
             <Modal show={true} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Utwórz potomka</Modal.Title>
+                    <Modal.Title>Utwórz rodzica</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Check
-                            id="existingFamilySelected"
-                            label="Dodaj do istniejącej rodziny"
-                            onClick={(e) => {
-                                let newValue = !addToExistingFamilySelected
-                                setAddToExistingFamilySelected(newValue)
-                                if (newValue) {
-                                    setSelectedFamily(DEFAULT_SELECTED_EXISTING_FAMILY)
-                                } else {
-                                    setSelectedFamily(null)
-                                    console.log("changing selected value to " + newValue)
-                                }
-                            }}
-                            checked={addToExistingFamilySelected}
-                            disabled={descendingFamilies.length === 0}
-                        />
-
-                        {addToExistingFamilySelected && (
-                            <Form.Select onChange={(e) => {
-                                const selectedFamily = descendingFamilies.find((family) => family.id.toString() !== e.target.value)
-                                setSelectedFamily(selectedFamily?.id || null)
-                            }}>
-                                {
-                                    descendingFamilies.map((family) => <option
-                                        value={family.id}>{formatFamilyName(family)}</option>)
-                                }
-                            </Form.Select>
-                        )}
-
+                    <Form>
                         <Form.Label>Płeć*</Form.Label>
                         <Form.Select onChange={(e) => setGender(e.target.value)} defaultValue={DEFAULT_GENDER}>
                             <option value="female">Kobieta</option>
@@ -134,7 +94,6 @@ export function CreateChildModal(props: CreateChildModal) {
                     </Button>
                     <Button variant="primary" disabled={!(firstName && lastName && gender)} onClick={(e) => {
                         handleConfirm()
-                        //console.log(JSON.stringify(addChildRequest))
                     }}>
                         Zapisz
                     </Button>
