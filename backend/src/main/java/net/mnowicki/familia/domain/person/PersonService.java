@@ -47,15 +47,8 @@ public class PersonService {
         return converter.toPersonDto(node);
     }
 
-    public PersonDto create(CreatePersonDto createPersonDto) {
-        var node = personRepository.save(PersonNode.builder()
-                .firstName(createPersonDto.firstName())
-                .lastName(createPersonDto.lastName())
-                .dateOfBirth(createPersonDto.dateOfBirth())
-                .dateOfDeath(createPersonDto.dateOfDeath())
-                .gender(createPersonDto.gender())
-                .build());
-
+    public PersonDto create(CreatePersonDto dto) {
+        var node = personRepository.save(converter.toPersonNode(dto));
         return converter.toPersonDto(node);
     }
 
@@ -81,16 +74,7 @@ public class PersonService {
                 .orElseGet(() -> FamilyNode.builder()
                         .parents(Set.of(parent))
                         .build());
-        var child = personRepository.save(PersonNode.builder()
-                .firstName(dto.firstName())
-                .middleName(dto.middleName())
-                .lastName(dto.lastName())
-                .maidenName(dto.maidenName())
-                .gender(dto.gender())
-                .dateOfBirth(dto.dateOfBirth())
-                .dateOfDeath(dto.dateOfDeath())
-                .description(dto.description())
-                .build());
+        var child = personRepository.save(converter.toPersonNode(dto));
         family.addChild(child);
         familyRepository.save(family);
 
@@ -106,16 +90,7 @@ public class PersonService {
         }).orElseGet(() -> FamilyNode.builder()
                 .children(Set.of(child))
                 .build());
-        var parent = personRepository.save(PersonNode.builder()
-                .firstName(dto.firstName())
-                .middleName(dto.middleName())
-                .lastName(dto.lastName())
-                .maidenName(dto.maidenName())
-                .gender(dto.gender())
-                .description(dto.description())
-                .dateOfBirth(dto.dateOfBirth())
-                .dateOfDeath(dto.dateOfDeath())
-                .build());
+        var parent = personRepository.save(converter.toPersonNode(dto));;
         family.addParent(parent);
         familyRepository.save(family);
 
@@ -125,16 +100,7 @@ public class PersonService {
     @Transactional
     public FamilyDto createSpouse(long id, CreatePersonDto dto) {
         var person = personRepository.findOrThrow(id);
-        var spouse = personRepository.save(PersonNode.builder()
-                .firstName(dto.firstName())
-                .middleName(dto.middleName())
-                .lastName(dto.lastName())
-                .maidenName(dto.maidenName())
-                .gender(dto.gender())
-                .description(dto.description())
-                .dateOfBirth(dto.dateOfBirth())
-                .dateOfDeath(dto.dateOfDeath())
-                .build());
+        var spouse = personRepository.save(personRepository.save(converter.toPersonNode(dto)));
         var family = familyRepository.save(FamilyNode.builder()
                         .parents(Set.of(person, spouse))
                 .build());

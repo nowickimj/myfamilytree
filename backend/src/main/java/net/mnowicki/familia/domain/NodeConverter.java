@@ -1,6 +1,7 @@
 package net.mnowicki.familia.domain;
 
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
+import net.mnowicki.familia.domain.person.dto.IPersonDto;
 import net.mnowicki.familia.domain.person.dto.PersonDto;
 import net.mnowicki.familia.model.graph.nodes.FamilyNode;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
@@ -20,6 +21,19 @@ public class NodeConverter {
                 .dateOfDeath(node.getDateOfDeath())
                 .gender(node.getGender())
                 .description(node.getDescription())
+                .build();
+    }
+
+    public PersonNode toPersonNode(IPersonDto dto) {
+        return PersonNode.builder()
+                .firstName(dto.firstName())
+                .middleName(dto.middleName())
+                .lastName(dto.lastName())
+                .maidenName(dto.maidenName())
+                .gender(dto.gender())
+                .dateOfBirth(dto.dateOfBirth())
+                .dateOfDeath(dto.dateOfDeath())
+                .description(dto.description())
                 .build();
     }
 

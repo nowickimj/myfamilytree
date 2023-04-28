@@ -10,5 +10,5 @@ import java.time.LocalDate;
 @Builder
 public record CreatePersonDto(@NotBlank String firstName, String middleName, @NotBlank String lastName,
                               String maidenName, LocalDate dateOfBirth, LocalDate dateOfDeath,
-                              @NonNull Gender gender, String description) {
+                              @NonNull Gender gender, String description) implements IPersonDto {
 }
