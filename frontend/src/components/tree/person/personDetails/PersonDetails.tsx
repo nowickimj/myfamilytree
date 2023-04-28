@@ -11,7 +11,7 @@ import {CreateChildModal} from "../modals/CreateChildModal";
 import {CreateParentModal} from "../modals/CreateParentModal";
 import {NodeDto} from "../../const";
 import {UpdatePersonModal} from "../modals/UpdatePersonModal";
-import {Spinner} from "react-bootstrap";
+import {Dropdown, Spinner} from "react-bootstrap";
 import {CreateSpouseModal} from "../modals/CreateSpouseModal";
 
 const personApi = new ApiQueries()
@@ -63,8 +63,8 @@ export const PersonDetails = memo(
         }
 
 
-        if(!data) {
-            return <Spinner animation="border" variant="light" />
+        if (!data) {
+            return <Spinner animation="border" variant="light"/>
         }
         return (
             <>
@@ -72,17 +72,32 @@ export const PersonDetails = memo(
                     <Offcanvas.Header>
                         <div>
                             <Offcanvas.Title>
-                                #{nodeId}
                                 <div className={css.headerButtons}>
-                                    <button className="btn btn-secondary mr-1"
-                                            onClick={handleUpdatePerson}>&#9998; Edytuj
-                                    </button>
-                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete}
-                                            disabled={node.parents.length > 0 && node.children.length > 0}>&#10008; Usuń
-                                    </button>
                                     <button className="btn btn-secondary mr-1" onClick={handleClose}>Zamknij</button>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                            Operacje
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item>
+                                                <button onClick={handleUpdatePerson}>&#9998; Edytuj</button>
+                                            </Dropdown.Item>
+                                            {!(node.parents.length > 1) && (<Dropdown.Item>
+                                                <button onClick={handleAddParent}>✚ Dodaj rodzica</button>
+                                            </Dropdown.Item>)}
+                                            <Dropdown.Item>
+                                                <button onClick={handleAddChild}>✚ Dodaj potomka</button>
+                                            </Dropdown.Item>
+                                            <Dropdown.Item>
+                                                <button onClick={handleAddSpouse}>✚ Dodaj partnera</button>
+                                            </Dropdown.Item>
+                                            {!(node.parents.length > 0 && node.children.length > 0) && (<Dropdown.Item>
+                                                <button onClick={handleDelete}>&#10008; Usuń</button>
+                                            </Dropdown.Item>)}
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                 </div>
-
+                                <p>#{nodeId}</p>
                             </Offcanvas.Title>
                             <div>
                                 <ReactImageFallback
@@ -95,18 +110,6 @@ export const PersonDetails = memo(
 
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-                        <div className="btn-group-vertical" role="group">
-                            <button className="btn btn-secondary mr-1" onClick={handleAddChild}>
-                                ✚ Dodaj potomka
-                            </button>
-                            <button className="btn btn-secondary mr-1" onClick={handleAddParent}
-                                    disabled={node.parents.length > 1}>
-                                ✚ Dodaj rodzica
-                            </button>
-                            <button className="btn btn-secondary mr-1" onClick={handleAddSpouse}>
-                                ✚ Dodaj partnera
-                            </button>
-                        </div>
                         <div>
                             <table className="table-light">
                                 <tbody>
