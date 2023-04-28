@@ -12,6 +12,7 @@ import {CreateParentModal} from "../modals/CreateParentModal";
 import {NodeDto} from "../../const";
 import {UpdatePersonModal} from "../modals/UpdatePersonModal";
 import {Spinner} from "react-bootstrap";
+import {CreateSpouseModal} from "../modals/CreateSpouseModal";
 
 const personApi = new ApiQueries()
 
@@ -38,11 +39,16 @@ export const PersonDetails = memo(
         const properties = getPersonProperties(data)
 
         //show modals
+        const [isUpdatePersonModalShown, setShowUpdatePersonModal] = useState(false)
         const [isDeleteModalShown, setShowDeleteModal] = useState(false)
         const [isAddChildModalShown, setShowAddChildModal] = useState(false)
         const [isAddParentModalShown, setShowAddParentModal] = useState(false)
-        const [isUpdatePersonModalShown, setShowUpdatePersonModal] = useState(false)
+        const [isAddSpouseModalShown, setShowAddSpouseModal] = useState(false)
 
+
+        const handleUpdatePerson: MouseEventHandler<HTMLButtonElement> = (event) => {
+            setShowUpdatePersonModal(isUpdatePersonModalShown => !isUpdatePersonModalShown)
+        }
         const handleDelete: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowDeleteModal(isDeleteModalShown => !isDeleteModalShown)
         }
@@ -52,9 +58,10 @@ export const PersonDetails = memo(
         const handleAddParent: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowAddParentModal(isAddParentModalShown => !isAddParentModalShown)
         }
-        const handleUpdatePerson: MouseEventHandler<HTMLButtonElement> = (event) => {
-            setShowUpdatePersonModal(isUpdatePersonModalShown => !isUpdatePersonModalShown)
+        const handleAddSpouse: MouseEventHandler<HTMLButtonElement> = (event) => {
+            setShowAddSpouseModal(isAddSpouseModalShown => !isAddSpouseModalShown)
         }
+
 
         if(!data) {
             return <Spinner animation="border" variant="light" />
@@ -96,6 +103,9 @@ export const PersonDetails = memo(
                                     disabled={node.parents.length > 1}>
                                 ✚ Dodaj rodzica
                             </button>
+                            <button className="btn btn-secondary mr-1" onClick={handleAddSpouse}>
+                                ✚ Dodaj partnera
+                            </button>
                         </div>
                         <div>
                             <table className="table-light">
@@ -120,13 +130,14 @@ export const PersonDetails = memo(
                     </Offcanvas.Body>
                 </Offcanvas>
 
-
+                {isUpdatePersonModalShown && (
+                    <UpdatePersonModal setShow={setShowUpdatePersonModal} nodeId={nodeId} current={data}/>)}
                 {isDeleteModalShown && (<DeletePersonModal setShow={setShowDeleteModal} nodeId={nodeId}
                                                            fullName={data?.firstName + " " + data?.lastName}/>)}
                 {isAddChildModalShown && (<CreateChildModal setShow={setShowAddChildModal} nodeId={nodeId}/>)}
                 {isAddParentModalShown && (<CreateParentModal setShow={setShowAddParentModal} nodeId={nodeId}/>)}
-                {isUpdatePersonModalShown && (
-                    <UpdatePersonModal setShow={setShowUpdatePersonModal} nodeId={nodeId} current={data}/>)}
+                {isAddSpouseModalShown && (
+                    <CreateSpouseModal setShow={setShowAddSpouseModal} nodeId={nodeId} personDetails={data}/>)}
             </>
         );
     },

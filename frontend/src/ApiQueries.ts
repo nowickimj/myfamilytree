@@ -83,7 +83,7 @@ export default class ApiQueries {
 
     public createChild(nodeId: string, request: CreateChildRequest) {
         return {
-            queryKey: ["addChild", nodeId],
+            queryKey: ["createChild", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
                 const {data} = await axios.post(
                     BASE_API + "/persons/" + nodeId + "/children",
@@ -99,10 +99,26 @@ export default class ApiQueries {
 
     public createParent(nodeId: string, request: PersonRequest) {
         return {
-            queryKey: ["addChild", nodeId],
+            queryKey: ["createParent", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
                 const {data} = await axios.post(
                     BASE_API + "/persons/" + nodeId + "/parents",
+                    request
+                );
+                return data;
+            },
+            options: {
+                manual: true
+            }
+        }
+    }
+
+    public createSpouse(nodeId: string, request: PersonRequest) {
+        return {
+            queryKey: ["createSpouse", nodeId],
+            queryFn: async (): Promise<FamilyDto> => {
+                const {data} = await axios.post(
+                    BASE_API + "/persons/" + nodeId + "/spouses",
                     request
                 );
                 return data;

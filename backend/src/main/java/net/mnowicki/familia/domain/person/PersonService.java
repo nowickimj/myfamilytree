@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -121,6 +118,26 @@ public class PersonService {
                 .build());
         family.addParent(parent);
         familyRepository.save(family);
+
+        return converter.toFamilyDto(family);
+    }
+
+    @Transactional
+    public FamilyDto createSpouse(long id, CreatePersonDto dto) {
+        var person = personRepository.findOrThrow(id);
+        var spouse = personRepository.save(PersonNode.builder()
+                .firstName(dto.firstName())
+                .middleName(dto.middleName())
+                .lastName(dto.lastName())
+                .maidenName(dto.maidenName())
+                .gender(dto.gender())
+                .description(dto.description())
+                .dateOfBirth(dto.dateOfBirth())
+                .dateOfDeath(dto.dateOfDeath())
+                .build());
+        var family = familyRepository.save(FamilyNode.builder()
+                        .parents(Set.of(person, spouse))
+                .build());
 
         return converter.toFamilyDto(family);
     }
