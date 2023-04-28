@@ -15,9 +15,11 @@ public class NodeConverter {
                 .firstName(node.getFirstName())
                 .middleName(node.getMiddleName())
                 .lastName(node.getLastName())
+                .maidenName(node.getMaidenName())
                 .dateOfBirth(node.getDateOfBirth())
                 .dateOfDeath(node.getDateOfDeath())
                 .gender(node.getGender())
+                .description(node.getDescription())
                 .build();
     }
 

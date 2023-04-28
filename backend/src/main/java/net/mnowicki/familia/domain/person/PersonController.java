@@ -1,6 +1,5 @@
 package net.mnowicki.familia.domain.person;
 
-import net.mnowicki.familia.domain.family.FamilyService;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import net.mnowicki.familia.domain.person.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,10 @@ import java.util.Set;
 public class PersonController {
 
     private final PersonService personService;
-    private final FamilyService familyService;
 
     @Autowired
-    public PersonController(PersonService personService, FamilyService familyService) {
+    public PersonController(PersonService personService) {
         this.personService = personService;
-        this.familyService = familyService;
     }
 
     @GetMapping
@@ -46,29 +43,29 @@ public class PersonController {
         return personService.update(id, dto);
     }
 
-    @PostMapping("/{id}/partners/{partnerId}")
-    public FamilyDto addPartner(@NotNull @PathVariable("id") long partnerId1, @NotNull @PathVariable("partnerId") long partnerId2) {
-        return familyService.addPartner(partnerId1, partnerId2);
-    }
-
     @PostMapping("/{id}/children")
     public FamilyDto createChild(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateChildDto dto) {
-        return familyService.createChild(parentId, dto);
+        return personService.createChild(parentId, dto);
     }
 
     @GetMapping("/{id}/parents")
     public Set<PersonDto> getParents(@NotNull @PathVariable("id") long childId) {
-        return familyService.getParents(childId);
+        return personService.getParents(childId);
+    }
+
+    @PostMapping("/{id}/parents")
+    public FamilyDto createParent(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreatePersonDto dto) {
+        return personService.createParent(parentId, dto);
     }
 
     @GetMapping("/{id}/descending")
     public Set<FamilyDto> getDescendingFamilies(@NotNull @PathVariable("id") long id) {
-        return familyService.getDescendingFamilies(id);
+        return personService.getDescendingFamilies(id);
     }
 
-    @PostMapping("/{id}/parents")
-    public FamilyDto createParent(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateParentDto dto) {
-        return familyService.createParent(parentId, dto);
+    @PostMapping("/{id}/spouses")
+    public FamilyDto createSpouse(@NotNull @PathVariable("id") long id, @RequestBody @Validated CreatePersonDto dto) {
+        return null; //TODO: implement
     }
 
     @DeleteMapping("/{id}")
