@@ -37,7 +37,7 @@ export function CreateParentModal(props: CreateParentModalProps) {
         description: description
     }
 
-    const callCreateParent = useQuery({...personApi.createChild(props.nodeId, addParentRequest), enabled: false}).refetch
+    const callCreateParent = useQuery({...personApi.createParent(props.nodeId, addParentRequest), enabled: false}).refetch
 
     const handleConfirm = () => {
         console.log("Adding new parent to " + props.nodeId + ": " + JSON.stringify(addParentRequest))

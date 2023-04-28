@@ -50,21 +50,6 @@ export default class ApiQueries {
         }
     }
 
-    public getParents(id: string) {
-        return {
-            queryKey: ["getParents", id],
-            queryFn: async (): Promise<PersonDto[]> => {
-                const {data} = await axios.get(
-                    BASE_API + "/persons/" + id + "/parents"
-                );
-                return data;
-            },
-            options: {
-                manual: true
-            }
-        }
-    }
-
     public deletePerson(nodeId: string) {
         return {
             queryKey: ["deletePerson", nodeId],

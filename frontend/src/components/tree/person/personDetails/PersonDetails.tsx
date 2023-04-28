@@ -84,7 +84,7 @@ export const PersonDetails = memo(
                             <button className="btn btn-secondary mr-1" onClick={handleAddChild}>
                                 ✚ Dodaj potomka
                             </button>
-                            <button className="btn btn-secondary mr-1" onClick={handleAddParent}>
+                            <button className="btn btn-secondary mr-1" onClick={handleAddParent} disabled={node.parents.length > 1}>
                                 ✚ Dodaj rodzica
                             </button>
                         </div>
@@ -102,11 +102,10 @@ export const PersonDetails = memo(
                                 </tbody>
                             </table>
                             <br/>
-                            <p>Opis: -</p>
-                            <br/>
+                            <p><b>Opis:</b></p>
                             <p>{data?.description ?? ""}</p>
                             <div>
-                                <p>Załączniki: -</p>
+                                <p><b>Załączniki:</b> -</p>
                             </div>
                         </div>
                     </Offcanvas.Body>
