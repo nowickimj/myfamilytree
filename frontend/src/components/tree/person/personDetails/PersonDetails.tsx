@@ -95,7 +95,7 @@ export const PersonDetails = memo(
 
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-                        <div className={css.personOperationButtons}>
+                        <div className="btn-group-vertical" role="group">
                             <button className="btn btn-secondary mr-1" onClick={handleAddChild}>
                                 ✚ Dodaj potomka
                             </button>

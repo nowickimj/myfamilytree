@@ -160,9 +160,14 @@ public class PersonService {
         }).ifPresent(familyRepository::delete);
 
         descendingFamilies.stream().filter(family -> {
-            boolean isNotSpouseFamily = family.getParents().size() < 2;
-            boolean isOnlyParent = family.getParents().stream().allMatch(deletedPerson::equals);
-            return isNotSpouseFamily && isOnlyParent;
+            boolean hasSpouse = family.getParents().size() == 2;
+            if(hasSpouse) {
+                //remove dangling family if no children
+                return family.getChildren().size() == 0;
+            } else {
+                //remove dangling family if no siblings to be aggregated
+                return family.getChildren().size() > 1;
+            }
         }).forEach(familyRepository::delete);
 
         personRepository.deleteExistingById(id);
