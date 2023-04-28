@@ -10,6 +10,8 @@ import {DeletePersonModal} from "../modals/DeletePersonModal";
 import {CreateChildModal} from "../modals/CreateChildModal";
 import {CreateParentModal} from "../modals/CreateParentModal";
 import {NodeDto} from "../../const";
+import {UpdatePersonModal} from "../modals/UpdatePersonModal";
+import {Spinner} from "react-bootstrap";
 
 const personApi = new ApiQueries()
 
@@ -39,6 +41,7 @@ export const PersonDetails = memo(
         const [isDeleteModalShown, setShowDeleteModal] = useState(false)
         const [isAddChildModalShown, setShowAddChildModal] = useState(false)
         const [isAddParentModalShown, setShowAddParentModal] = useState(false)
+        const [isUpdatePersonModalShown, setShowUpdatePersonModal] = useState(false)
 
         const handleDelete: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowDeleteModal(isDeleteModalShown => !isDeleteModalShown)
@@ -49,7 +52,13 @@ export const PersonDetails = memo(
         const handleAddParent: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowAddParentModal(isAddParentModalShown => !isAddParentModalShown)
         }
+        const handleUpdatePerson: MouseEventHandler<HTMLButtonElement> = (event) => {
+            setShowUpdatePersonModal(isUpdatePersonModalShown => !isUpdatePersonModalShown)
+        }
 
+        if(!data) {
+            return <Spinner animation="border" variant="light" />
+        }
         return (
             <>
                 <Offcanvas show={show} onHide={handleClose} placement="end">
@@ -58,12 +67,11 @@ export const PersonDetails = memo(
                             <Offcanvas.Title>
                                 #{nodeId}
                                 <div className={css.headerButtons}>
-                                    <button className="btn btn-secondary mr-1" onClick={(event) => {
-                                        console.log("save button clicked")
-                                    }}>
-                                        &#9998; Zapisz
+                                    <button className="btn btn-secondary mr-1"
+                                            onClick={handleUpdatePerson}>&#9998; Edytuj
                                     </button>
-                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete} disabled={node.parents.length > 0 && node.children.length > 0}>&#10008; Usuń
+                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete}
+                                            disabled={node.parents.length > 0 && node.children.length > 0}>&#10008; Usuń
                                     </button>
                                     <button className="btn btn-secondary mr-1" onClick={handleClose}>Zamknij</button>
                                 </div>
@@ -84,7 +92,8 @@ export const PersonDetails = memo(
                             <button className="btn btn-secondary mr-1" onClick={handleAddChild}>
                                 ✚ Dodaj potomka
                             </button>
-                            <button className="btn btn-secondary mr-1" onClick={handleAddParent} disabled={node.parents.length > 1}>
+                            <button className="btn btn-secondary mr-1" onClick={handleAddParent}
+                                    disabled={node.parents.length > 1}>
                                 ✚ Dodaj rodzica
                             </button>
                         </div>
@@ -116,6 +125,8 @@ export const PersonDetails = memo(
                                                            fullName={data?.firstName + " " + data?.lastName}/>)}
                 {isAddChildModalShown && (<CreateChildModal setShow={setShowAddChildModal} nodeId={nodeId}/>)}
                 {isAddParentModalShown && (<CreateParentModal setShow={setShowAddParentModal} nodeId={nodeId}/>)}
+                {isUpdatePersonModalShown && (
+                    <UpdatePersonModal setShow={setShowUpdatePersonModal} nodeId={nodeId} current={data}/>)}
             </>
         );
     },

@@ -7,6 +7,7 @@ import css from "./Tree.module.css"
 import {useQuery} from "@tanstack/react-query"
 import axios from "axios";
 import {ExtNode} from "relatives-tree/lib/types";
+import {Spinner} from "react-bootstrap";
 
 
 const DEFAULT_ROOT_ID = "0"
@@ -31,9 +32,7 @@ export default function Tree() {
     const [selectedNode, setSelectedNode] = useState<NodeDto>()
 
     if (nodes.length == 0) {
-        return <div>
-            <p>Łączenie z serwerem...</p>
-        </div>
+        return <Spinner animation="border" variant="light" />
     }
     return <div className="flex grid justify-items-center content-center mt-4 rounded-md px-8 py-4">
         <ReactFamilyTree

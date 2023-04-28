@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form} from "react-bootstrap";
-import ApiQueries, {CreatePersonRequest, FamilyDto} from "../../../../ApiQueries";
+import ApiQueries, {PersonRequest, FamilyDto} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 import {formatFamilyName} from "../../nodeUtils";
 
@@ -26,7 +26,7 @@ export function CreateParentModal(props: CreateParentModalProps) {
     const [dateOfDeath, setDateOfDeath] = useState<string | null>(null)
     const [description, setDescription] = useState<string | null>(null)
 
-    const addParentRequest: CreatePersonRequest = {
+    const addParentRequest: PersonRequest = {
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,

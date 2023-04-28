@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form} from "react-bootstrap";
-import ApiQueries, {CreateChildRequest, CreatePersonRequest, FamilyDto} from "../../../../ApiQueries";
+import ApiQueries, {CreateChildRequest, PersonRequest, FamilyDto} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 import {formatFamilyName} from "../../nodeUtils";
 

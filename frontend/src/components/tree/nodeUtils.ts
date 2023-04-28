@@ -21,9 +21,13 @@ export function formatNullableNodeStringProperty(property: string | undefined): 
     return property ?? "-"
 }
 
-export function formatNullableNodeDateProperty(property: number[] | undefined): string {
+export function formatNullableNodeDateProperty(property: number[] | undefined | null): string {
+    return convertNullableLocalDate(property) ?? "???"
+}
+
+export function convertNullableLocalDate(property: number[] | undefined | null): string | null {
     if (!property) {
-        return "???"
+        return null
     }
     const year = property[0].toString()
     const month = formatMonthDay(property[1].toString())

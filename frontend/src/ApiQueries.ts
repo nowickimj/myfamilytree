@@ -8,6 +8,7 @@ export interface PersonDto {
     lastName: string,
     middleName?: string,
     maidenName?: string,
+    gender: string,
     dateOfBirth?: number[],
     dateOfDeath?: number[],
     description?: string
@@ -20,19 +21,18 @@ export interface FamilyDto {
     children: PersonDto[]
 }
 
-export interface CreatePersonRequest {
-    familyId?: number | null,
+export interface PersonRequest {
     firstName: string | null,
     lastName: string | null,
     gender: string | null,
-    middleName: string | null,
-    maidenName: string | null,
-    dateOfBirth: string | null,
-    dateOfDeath: string | null,
-    description: string | null
+    middleName?: string | null,
+    maidenName?: string | null,
+    dateOfBirth?: string | null,
+    dateOfDeath?: string | null,
+    description?: string | null
 }
 
-export interface CreateChildRequest extends CreatePersonRequest {
+export interface CreateChildRequest extends PersonRequest {
     familyId?: number | null
 }
 
@@ -46,6 +46,22 @@ export default class ApiQueries {
                     BASE_API + "/persons/" + nodeId
                 );
                 return data;
+            }
+        }
+    }
+
+    public updatePerson(nodeId: string, request: PersonRequest) {
+        return {
+            queryKey: ["updatePerson", nodeId],
+            queryFn: async (): Promise<PersonDto> => {
+                const {data} = await axios.patch(
+                    BASE_API + "/persons/" + nodeId,
+                    request
+                );
+                return data;
+            },
+            options: {
+                manual: true
             }
         }
     }
@@ -81,7 +97,7 @@ export default class ApiQueries {
         }
     }
 
-    public createParent(nodeId: string, request: CreatePersonRequest) {
+    public createParent(nodeId: string, request: PersonRequest) {
         return {
             queryKey: ["addChild", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
