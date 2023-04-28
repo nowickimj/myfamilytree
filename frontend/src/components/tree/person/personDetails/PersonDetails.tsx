@@ -6,9 +6,9 @@ import ReactImageFallback from "react-image-fallback";
 import defaultAvatar from "../../../../assets/default-avatar.jpg";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import ApiQueries from "../../../../ApiQueries";
-import {DeletePersonModal} from "../deletePerson/DeletePerson";
-import {CreateChildModal} from "../addChild/CreateChildModal";
-import {CreateParentModal} from "../addParent/CreateParentModal";
+import {DeletePersonModal} from "../modals/DeletePersonModal";
+import {CreateChildModal} from "../modals/CreateChildModal";
+import {CreateParentModal} from "../modals/CreateParentModal";
 import {NodeDto} from "../../const";
 
 const personApi = new ApiQueries()
@@ -63,7 +63,7 @@ export const PersonDetails = memo(
                                     }}>
                                         &#9998; Zapisz
                                     </button>
-                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete}>&#10008; Usuń
+                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete} disabled={node.children.length > 0}>&#10008; Usuń
                                     </button>
                                     <button className="btn btn-secondary mr-1" onClick={handleClose}>Zamknij</button>
                                 </div>
