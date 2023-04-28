@@ -43,7 +43,8 @@ public class GraphDao {
         var queryResults = neo4jClient.query("""
                         MATCH (n:Person)
                         OPTIONAL MATCH (n)<-[:CHILD]-(pf:Family)<-[:PARENT]-(parent:Person)
-                        OPTIONAL MATCH (n)-[:PARENT]->(cf:Family)-[:CHILD]->(child:Person)
+                        OPTIONAL MATCH (n)-[:PARENT]->(cf:Family)
+                        OPTIONAL MATCH (cf)-[:CHILD]->(child:Person)
                         OPTIONAL MATCH (pf)-[:CHILD]->(sb:Person)
                             WHERE ID(sb)<>ID(n)
                         OPTIONAL MATCH (cf)<-[:PARENT]-(sp:Person)
