@@ -58,9 +58,14 @@ public class PersonController {
         return personService.createParent(parentId, dto);
     }
 
-    @GetMapping("/{id}/descending")
+    @GetMapping("/{id}/families/descending")
     public Set<FamilyDto> getDescendingFamilies(@NotNull @PathVariable("id") long id) {
         return personService.getDescendingFamilies(id);
+    }
+
+    @GetMapping("/{id}/families/ascending")
+    public FamilyDto getAscendingFamily(@NotNull @PathVariable("id") long id) {
+        return personService.getAscendingFamily(id);
     }
 
     @PostMapping("/{id}/spouses")

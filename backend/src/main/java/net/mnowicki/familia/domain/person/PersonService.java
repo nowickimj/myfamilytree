@@ -2,8 +2,7 @@ package net.mnowicki.familia.domain.person;
 
 import net.mnowicki.familia.domain.NodeConverter;
 import net.mnowicki.familia.domain.PersonUtils;
-import net.mnowicki.familia.domain.exception.FamilyCreationException;
-import net.mnowicki.familia.domain.exception.PersonDeletionException;
+import net.mnowicki.familia.exception.BadRequestException;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import net.mnowicki.familia.domain.person.dto.CreateChildDto;
 import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
@@ -129,22 +128,25 @@ public class PersonService {
     @Transactional
     public void deleteExistingById(long id) {
         var deletedPerson = personRepository.findOrThrow(id);
+        var ascendingFamily = familyRepository.findAscendingFamily(id);
         var descendingFamilies = familyRepository.findDescendingFamilies(id);
-        boolean hasUndeletableDescendingFamilies = descendingFamilies.stream()
-                .anyMatch(descendingFamily -> {
-                    boolean hasSpouse = descendingFamily.getParents().stream().anyMatch(parent -> !parent.equals(deletedPerson));
-                    boolean hasChildren = !descendingFamily.getChildren().isEmpty();
-                    return hasSpouse || hasChildren;
-                });
-        if (hasUndeletableDescendingFamilies) {
-            throw new PersonDeletionException(id, "Person has undetachable children");
+
+        boolean isMiddleNode = ascendingFamily.isPresent() && !descendingFamilies.isEmpty();
+        if (isMiddleNode) {
+            throw new BadRequestException("Middle node cannot be deleted.");
         }
-        // delete ascending family if necessary
-        familyRepository.findAscendingFamily(id).filter(ascendingFamily -> {
-            boolean isNotSpouseFamily = ascendingFamily.getParents().size() < 2;
-            boolean hasNoOtherChildren = ascendingFamily.getChildren().stream().allMatch(child -> child.equals(deletedPerson));
-            return isNotSpouseFamily && hasNoOtherChildren;
+
+        ascendingFamily.filter(family -> {
+            boolean isNotSpouseFamily = family.getParents().size() < 2;
+            boolean isOnlyChild = family.getChildren().stream().allMatch(deletedPerson::equals);
+            return isNotSpouseFamily && isOnlyChild;
         }).ifPresent(familyRepository::delete);
+
+        descendingFamilies.stream().filter(family -> {
+            boolean isNotSpouseFamily = family.getParents().size() < 2;
+            boolean isOnlyParent = family.getParents().stream().allMatch(deletedPerson::equals);
+            return isNotSpouseFamily && isOnlyParent;
+        }).forEach(familyRepository::delete);
 
         personRepository.deleteExistingById(id);
     }
@@ -183,6 +185,12 @@ public class PersonService {
                 .collect(Collectors.toSet());
     }
 
+    public FamilyDto getAscendingFamily(long personId) {
+        return familyRepository.findAscendingFamily(personId)
+                .map(converter::toFamilyDto)
+                .orElse(null);
+    }
+
     public Set<FamilyDto> getDescendingFamilies(long personId) {
         return familyRepository.findDescendingFamilies(personId).stream()
                 .map(converter::toFamilyDto)
@@ -191,7 +199,7 @@ public class PersonService {
 
     public void assertPersonsNotAlreadyInFamily(PersonNode person1, PersonNode person2) {
         if (familyRepository.hasFamilyWith(person1.getId(), person2.getId())) {
-            throw new FamilyCreationException("Person with id %s is already a family with %s", Long.toString(person1.getId()), Long.toString(person2.getId()));
+            throw new BadRequestException("Person with id %s is already a family with %s", Long.toString(person1.getId()), Long.toString(person2.getId()));
         }
     }
 

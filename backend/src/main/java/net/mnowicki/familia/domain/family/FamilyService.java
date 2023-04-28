@@ -2,7 +2,7 @@ package net.mnowicki.familia.domain.family;
 
 import net.mnowicki.familia.domain.NodeConverter;
 import net.mnowicki.familia.domain.PersonUtils;
-import net.mnowicki.familia.domain.exception.FamilyCreationException;
+import net.mnowicki.familia.exception.BadRequestException;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
 import net.mnowicki.familia.model.graph.repositories.FamilyRepository;
 import net.mnowicki.familia.model.graph.repositories.PersonRepository;
@@ -52,7 +52,7 @@ public class FamilyService {
 
     public void assertChildNotAssignedToFamily(long childId) {
         familyRepository.findAscendingFamily(childId).ifPresent(existingFamily -> {
-            throw new FamilyCreationException("Child with id %s is already assigned to family with id %s", Long.toString(childId), existingFamily.idAsString());
+            throw new BadRequestException("Child with id %s is already assigned to family with id %s", Long.toString(childId), existingFamily.idAsString());
         });
     }
 

@@ -63,7 +63,7 @@ export const PersonDetails = memo(
                                     }}>
                                         &#9998; Zapisz
                                     </button>
-                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete} disabled={node.children.length > 0}>&#10008; Usuń
+                                    <button className="btn btn-secondary  mr-1" onClick={handleDelete} disabled={node.parents.length > 0 && node.children.length > 0}>&#10008; Usuń
                                     </button>
                                     <button className="btn btn-secondary mr-1" onClick={handleClose}>Zamknij</button>
                                 </div>

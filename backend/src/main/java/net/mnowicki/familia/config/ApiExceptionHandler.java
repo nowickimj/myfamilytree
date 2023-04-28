@@ -1,8 +1,7 @@
 package net.mnowicki.familia.config;
 
 import jakarta.servlet.http.HttpServletRequest;
-import net.mnowicki.familia.domain.exception.BadRequestException;
-import net.mnowicki.familia.domain.exception.FamilyCreationException;
+import net.mnowicki.familia.exception.BadRequestException;
 import net.mnowicki.familia.exception.NodeNotFoundException;
 import net.mnowicki.familia.exception.NotFoundException;
 import org.springframework.http.HttpStatus;

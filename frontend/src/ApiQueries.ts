@@ -102,7 +102,7 @@ export default class ApiQueries {
             queryKey: ["getDescendingFamilies", nodeId],
             queryFn: async (): Promise<FamilyDto[]> => {
                 const {data} = await axios.get(
-                    BASE_API + "/persons/" + nodeId + "/descending"
+                    BASE_API + "/persons/" + nodeId + "/families/descending"
                 );
                 return data;
             },
