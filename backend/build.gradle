@@ -18,17 +18,23 @@ jib.to.image = "familia:latest"
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//	implementation 'org.springframework.boot:spring-boot-starter-security' TODO: implement filter chain
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation "org.neo4j:neo4j-ogm:${neo4jOgmVersion}"
 	implementation "javax.validation:validation-api:$validationApiVersion"
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
-	implementation 'org.liquibase:liquibase-core'
+//	implementation 'org.liquibase:liquibase-core'
+	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
 	implementation "commons-io:commons-io:$commonsIoVersion"
+
 	compileOnly "org.projectlombok:lombok:$lombokVersion"
+
 	annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+	runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+	runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

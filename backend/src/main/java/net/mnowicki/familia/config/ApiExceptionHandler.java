@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import net.mnowicki.familia.exception.BadRequestException;
 import net.mnowicki.familia.exception.NodeNotFoundException;
 import net.mnowicki.familia.exception.NotFoundException;
+import net.mnowicki.familia.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +26,11 @@ public class ApiExceptionHandler {
     public <E extends BadRequestException> ResponseEntity<ErrorApiResponse> handleBadRequest(final HttpServletRequest request, final E e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(buildErrorResponse(e.getMessage(), request.getRequestURI()));
+    }
+
+    @ExceptionHandler({UnauthorizedException.class})
+    public <E extends UnauthorizedException> ResponseEntity<ErrorApiResponse> handleUnauthorized(final HttpServletRequest request, final E e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     private ErrorApiResponse buildErrorResponse(String message, String path) {
