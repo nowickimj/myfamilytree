@@ -72,32 +72,39 @@ export const PersonDetails = memo(
                     <Offcanvas.Header>
                         <div>
                             <Offcanvas.Title>
-                                <div className={css.headerButtons}>
-                                    <button className="btn btn-secondary mr-1" onClick={handleClose}>Zamknij</button>
-                                    <Dropdown>
-                                        <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                            Operacje
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item>
-                                                <button onClick={handleUpdatePerson}>&#9998; Edytuj</button>
-                                            </Dropdown.Item>
-                                            {!(node.parents.length > 1) && (<Dropdown.Item>
-                                                <button onClick={handleAddParent}>✚ Dodaj rodzica</button>
-                                            </Dropdown.Item>)}
-                                            <Dropdown.Item>
-                                                <button onClick={handleAddChild}>✚ Dodaj potomka</button>
-                                            </Dropdown.Item>
-                                            <Dropdown.Item>
-                                                <button onClick={handleAddSpouse}>✚ Dodaj partnera</button>
-                                            </Dropdown.Item>
-                                            {!(node.parents.length > 0 && node.children.length > 0) && (<Dropdown.Item>
-                                                <button onClick={handleDelete}>&#10008; Usuń</button>
-                                            </Dropdown.Item>)}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                <div className={css.titleHeader}>
+                                    <div>
+                                        <p>#{nodeId}</p>
+                                    </div>
+                                    <div className={css.titleHeaderButtonGroup}>
+
+                                        <button className="btn btn-danger mr-1" onClick={handleClose}>&#x2715;
+                                        </button>
+                                        <Dropdown>
+                                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                                Operacje
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item>
+                                                    <button onClick={handleUpdatePerson}>&#9998; Edytuj</button>
+                                                </Dropdown.Item>
+                                                {!(node.parents.length > 1) && (<Dropdown.Item>
+                                                    <button onClick={handleAddParent}>✚ Dodaj rodzica</button>
+                                                </Dropdown.Item>)}
+                                                <Dropdown.Item>
+                                                    <button onClick={handleAddChild}>✚ Dodaj potomka</button>
+                                                </Dropdown.Item>
+                                                <Dropdown.Item>
+                                                    <button onClick={handleAddSpouse}>✚ Dodaj partnera</button>
+                                                </Dropdown.Item>
+                                                {!(node.parents.length > 0 && node.children.length > 0) && (
+                                                    <Dropdown.Item>
+                                                        <button onClick={handleDelete}>&#10008; Usuń</button>
+                                                    </Dropdown.Item>)}
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </div>
                                 </div>
-                                <p>#{nodeId}</p>
                             </Offcanvas.Title>
                             <div>
                                 <ReactImageFallback
