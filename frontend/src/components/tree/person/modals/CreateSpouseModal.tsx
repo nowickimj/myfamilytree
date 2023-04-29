@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form} from "react-bootstrap";
-import ApiQueries, {PersonRequest, PersonDto} from "../../../../ApiQueries";
+import ApiQueries, {PersonRequest, PersonDto, FamilyDto, CreateSpouseRequest} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
+import {formatFamilyName} from "../../nodeUtils";
 
 const personApi = new ApiQueries()
 
@@ -26,7 +27,13 @@ export function CreateSpouseModal(props: CreateSpouseModalProps) {
     const [dateOfDeath, setDateOfDeath] = useState<string | null>(null)
     const [description, setDescription] = useState<string | null>(null)
 
-    const createSpouseRequest: PersonRequest = {
+    const availableDescendingFamilies: FamilyDto[] = useQuery({...personApi.getDescendingFamilies(props.nodeId)}).data?.filter((family) => family.parents.length < 2) ?? []
+    const defaultSelectedFamilyId = availableDescendingFamilies[0]?.id ?? null
+    const [selectedFamilyId, setSelectedFamilyId] = useState<number | null>(defaultSelectedFamilyId)
+    const [addToExistingFamilySelected, setAddToExistingFamilySelected] = useState(availableDescendingFamilies.length > 0)
+
+    const createSpouseRequest: CreateSpouseRequest = {
+        familyId: selectedFamilyId,
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,
@@ -41,7 +48,7 @@ export function CreateSpouseModal(props: CreateSpouseModalProps) {
 
     const handleConfirm = () => {
         console.log("Adding spouse to " + props.nodeId + ": " + JSON.stringify(createSpouseRequest))
-        const result = callCreateSpouse()
+        callCreateSpouse()
         handleClose()
     }
     const handleClose = () => props.setShow(false);
@@ -54,6 +61,34 @@ export function CreateSpouseModal(props: CreateSpouseModalProps) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
+                        <Form.Check
+                            id="existingFamilySelected"
+                            label="Dodaj do istniejącej rodziny"
+                            onClick={(e) => {
+                                let newValue = !addToExistingFamilySelected
+                                setAddToExistingFamilySelected(newValue)
+                                if (newValue) {
+                                    setSelectedFamilyId(defaultSelectedFamilyId)
+                                } else {
+                                    setSelectedFamilyId(null)
+                                    console.log("changing selected value to " + newValue)
+                                }
+                            }}
+                            checked={addToExistingFamilySelected}
+                            disabled={availableDescendingFamilies.length === 0}
+                        />
+
+                        {addToExistingFamilySelected && (
+                            <Form.Select onChange={(e) => {
+                                const selectedFamily = availableDescendingFamilies.find((family) => family.id.toString() !== e.target.value)
+                                setSelectedFamilyId(selectedFamily?.id || null)
+                            }}>
+                                {
+                                    availableDescendingFamilies.map((family) => <option
+                                        value={family.id}>{formatFamilyName(family)}</option>)
+                                }
+                            </Form.Select>
+                        )}
                         <Form.Label>Płeć*</Form.Label>
                         <Form.Select onChange={(e) => setGender(e.target.value)} defaultValue={DEFAULT_GENDER}>
                             <option value="female">Kobieta</option>

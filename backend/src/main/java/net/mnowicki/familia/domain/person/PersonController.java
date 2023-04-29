@@ -43,14 +43,14 @@ public class PersonController {
         return personService.update(id, dto);
     }
 
-    @PostMapping("/{id}/children")
-    public FamilyDto createChild(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateChildDto dto) {
-        return personService.createChild(parentId, dto);
-    }
-
     @GetMapping("/{id}/parents")
     public Set<PersonDto> getParents(@NotNull @PathVariable("id") long childId) {
         return personService.getParents(childId);
+    }
+
+    @PostMapping("/{id}/children")
+    public FamilyDto createChild(@NotNull @PathVariable("id") long parentId, @RequestBody @Validated CreateChildDto dto) {
+        return personService.createChild(parentId, dto);
     }
 
     @PostMapping("/{id}/parents")
@@ -59,7 +59,7 @@ public class PersonController {
     }
 
     @PostMapping("/{id}/spouses")
-    public FamilyDto createSpouse(@NotNull @PathVariable("id") long id, @RequestBody @Validated CreatePersonDto dto) {
+    public FamilyDto createSpouse(@NotNull @PathVariable("id") long id, @RequestBody @Validated CreateSpouseDto dto) {
         return personService.createSpouse(id, dto);
     }
 

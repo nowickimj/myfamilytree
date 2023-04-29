@@ -2,12 +2,9 @@ package net.mnowicki.familia.domain.person;
 
 import net.mnowicki.familia.domain.NodeConverter;
 import net.mnowicki.familia.domain.PersonUtils;
+import net.mnowicki.familia.domain.person.dto.*;
 import net.mnowicki.familia.exception.BadRequestException;
 import net.mnowicki.familia.domain.family.dto.FamilyDto;
-import net.mnowicki.familia.domain.person.dto.CreateChildDto;
-import net.mnowicki.familia.domain.person.dto.CreatePersonDto;
-import net.mnowicki.familia.domain.person.dto.PersonDto;
-import net.mnowicki.familia.domain.person.dto.UpdatePersonDto;
 import net.mnowicki.familia.model.graph.nodes.FamilyNode;
 import net.mnowicki.familia.model.graph.nodes.PersonNode;
 import net.mnowicki.familia.model.graph.repositories.FamilyRepository;
@@ -90,7 +87,7 @@ public class PersonService {
         }).orElseGet(() -> FamilyNode.builder()
                 .children(Set.of(child))
                 .build());
-        var parent = personRepository.save(converter.toPersonNode(dto));;
+        var parent = personRepository.save(converter.toPersonNode(dto));
         family.addParent(parent);
         familyRepository.save(family);
 
@@ -98,12 +95,14 @@ public class PersonService {
     }
 
     @Transactional
-    public FamilyDto createSpouse(long id, CreatePersonDto dto) {
-        var person = personRepository.findOrThrow(id);
+    public FamilyDto createSpouse(long id, CreateSpouseDto dto) {
+        personRepository.findOrThrow(id);
         var spouse = personRepository.save(personRepository.save(converter.toPersonNode(dto)));
-        var family = familyRepository.save(FamilyNode.builder()
-                        .parents(Set.of(person, spouse))
-                .build());
+        var family = Optional.ofNullable(dto.familyId())
+                .map(familyRepository::findOrThrow)
+                .orElseGet(FamilyNode::new);
+        family.addParent(spouse);
+        familyRepository.save(family);
 
         return converter.toFamilyDto(family);
     }
@@ -127,7 +126,7 @@ public class PersonService {
 
         descendingFamilies.stream().filter(family -> {
             boolean hasSpouse = family.getParents().size() == 2;
-            if(hasSpouse) {
+            if (hasSpouse) {
                 //remove dangling family if no children
                 return family.getChildren().size() == 0;
             } else {

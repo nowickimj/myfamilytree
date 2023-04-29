@@ -1,7 +1,6 @@
 package net.mnowicki.familia.model.graph.nodes;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import net.mnowicki.familia.model.RelationshipType;
 import net.mnowicki.familia.model.graph.base.BaseNode;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -12,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Node("Family")
 public class FamilyNode extends BaseNode {

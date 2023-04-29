@@ -36,6 +36,10 @@ export interface CreateChildRequest extends PersonRequest {
     familyId?: number | null
 }
 
+export interface CreateSpouseRequest extends PersonRequest {
+    familyId?: number | null
+}
+
 export default class ApiQueries {
 
     public getPerson(nodeId: string) {
