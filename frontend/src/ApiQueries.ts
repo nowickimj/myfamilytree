@@ -2,6 +2,16 @@ import axios from "axios";
 
 const BASE_API = "http://localhost:8080/api"
 
+export interface SignInRequest {
+    email: string,
+    password: string
+}
+
+export interface SignInResponse {
+    token: string,
+    refreshToken: string
+}
+
 export interface PersonDto {
     id: number,
     firstName: string,
@@ -41,6 +51,22 @@ export interface CreateSpouseRequest extends PersonRequest {
 }
 
 export default class ApiQueries {
+
+    public signIn(request: SignInRequest) {
+        return {
+            queryKey: ["signIn"],
+            queryFn: async (): Promise<SignInResponse> => {
+                const {data} = await axios.post(
+                    BASE_API + "/auth/signin",
+                    request
+                );
+                return data;
+            },
+            options: {
+                manual: true
+            }
+        }
+    }
 
     public getPerson(nodeId: string) {
         return {
