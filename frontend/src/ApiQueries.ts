@@ -2,7 +2,7 @@ import axios, {AxiosHeaders, AxiosRequestConfig} from "axios";
 import {getAuth} from "./components/auth";
 import {NodeDto} from "./components/tree/const";
 
-const BASE_API = "http://localhost:8080/api"
+export const BASE_API = "http://localhost:8080/api"
 
 export interface SignInRequest {
     email: string,

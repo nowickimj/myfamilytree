@@ -5,6 +5,7 @@ import {Form} from "react-bootstrap";
 import ApiQueries, {PersonRequest, PersonDto, FamilyDto, CreateSpouseRequest} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 import {formatFamilyName} from "../../nodeUtils";
+import {reloadComponents} from "../../../../utlis";
 
 const personApi = new ApiQueries()
 
@@ -50,6 +51,7 @@ export function CreateSpouseModal(props: CreateSpouseModalProps) {
         console.log("Adding spouse to " + props.nodeId + ": " + JSON.stringify(createSpouseRequest))
         callCreateSpouse()
         handleClose()
+        reloadComponents()
     }
     const handleClose = () => props.setShow(false);
 

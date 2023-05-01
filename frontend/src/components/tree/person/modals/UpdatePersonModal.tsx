@@ -5,6 +5,7 @@ import {Form} from "react-bootstrap";
 import ApiQueries, {PersonRequest, FamilyDto, PersonDto} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 import {convertNullableLocalDate, formatFamilyName, formatNullableNodeDateProperty} from "../../nodeUtils";
+import {reloadComponents} from "../../../../utlis";
 
 const personApi = new ApiQueries()
 
@@ -47,6 +48,7 @@ export function UpdatePersonModal(props: UpdatePersonModalProps) {
                 console.log("error caught")
             } else {
                 handleClose()
+                reloadComponents()
             }
         })
     }

@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import ApiQueries from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
+import {reloadComponents} from "../../../../utlis";
 
 const personApi = new ApiQueries()
 
@@ -19,7 +20,7 @@ export function DeletePersonModal(props: DeletePersonProps) {
     const handleConfirm = () => {
         refetch()
         handleClose()
-        window.location.reload() //TODO: reload tree component instead of whole page
+        reloadComponents()
     }
 
     return (

@@ -96,11 +96,12 @@ public class PersonService {
 
     @Transactional
     public FamilyDto createSpouse(long id, CreateSpouseDto dto) {
-        personRepository.findOrThrow(id);
-        var spouse = personRepository.save(personRepository.save(converter.toPersonNode(dto)));
+        var person = personRepository.findOrThrow(id);
+        var spouse = personRepository.save(converter.toPersonNode(dto));
         var family = Optional.ofNullable(dto.familyId())
                 .map(familyRepository::findOrThrow)
                 .orElseGet(FamilyNode::new);
+        family.addParent(person);
         family.addParent(spouse);
         familyRepository.save(family);
 
@@ -138,18 +139,18 @@ public class PersonService {
         personRepository.deleteExistingById(id);
     }
 
-    public FamilyDto spouse(long personId1, long personId2) {
-        var person1 = personRepository.findOrThrow(personId1);
-        var person2 = personRepository.findOrThrow(personId2);
-        assertPersonsNotAlreadyInFamily(person1, person2);
-
-        var family = FamilyNode.builder()
-                .parents(Set.of(person1, person2))
-                .build();
-        familyRepository.save(family);
-
-        return converter.toFamilyDto(family);
-    }
+//    public FamilyDto spouse(long personId1, long personId2) {
+//        var person1 = personRepository.findOrThrow(personId1);
+//        var person2 = personRepository.findOrThrow(personId2);
+//        assertPersonsNotAlreadyInFamily(person1, person2);
+//
+//        var family = FamilyNode.builder()
+//                .parents(Set.of(person1, person2))
+//                .build();
+//        familyRepository.save(family);
+//
+//        return converter.toFamilyDto(family);
+//    }
 
     private void updateStringValueIfPresent(Supplier<String> dtoGetter, Consumer<String> nodeSetter) {
         Optional.ofNullable(dtoGetter.get())
@@ -184,10 +185,10 @@ public class PersonService {
                 .collect(Collectors.toSet());
     }
 
-    public void assertPersonsNotAlreadyInFamily(PersonNode person1, PersonNode person2) {
-        if (familyRepository.hasFamilyWith(person1.getId(), person2.getId())) {
-            throw new BadRequestException("Person with id %s is already a family with %s", Long.toString(person1.getId()), Long.toString(person2.getId()));
-        }
-    }
+//    public void assertPersonsNotAlreadyInFamily(PersonNode person1, PersonNode person2) {
+//        if (familyRepository.hasFamilyWith(person1.getId(), person2.getId())) {
+//            throw new BadRequestException("Person with id %s is already a family with %s", Long.toString(person1.getId()), Long.toString(person2.getId()));
+//        }
+//    }
 
 }

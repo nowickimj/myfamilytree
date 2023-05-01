@@ -1,40 +1,41 @@
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import React, {useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import Modal from "react-bootstrap/Modal"
-import ApiQueries, {SignInRequest, SignInResponse} from "../../ApiQueries"
-import {setAuth} from "../auth";
-import {useQuery} from "@tanstack/react-query";
-
-const api = new ApiQueries()
+import {BASE_API, SignInRequest} from "../../ApiQueries"
+import {getAuth, setAuth} from "../auth";
+import axios from "axios";
+import {reloadComponents} from "../../utlis";
 
 export interface LoginPageProps {
 }
 
-export function LoginPage(props: LoginPageProps) {
+export function LoginModal(props: LoginPageProps) {
 
-    const [show, setShow] = useState(true)
+    const [fetchedToken, setFetchedToken] = useState<string | null>(null)
+    const [show, setShow] = useState(!(!!fetchedToken))
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+    const [errorMessage, setErrorMessage] = useState<string | null>(getAuth)
 
     const request: SignInRequest = {
         email: email,
         password: password
     }
 
-    const confirmQuery = useQuery({...api.signIn(request), enabled: false})
     const handleConfirm = () => {
-        confirmQuery.refetch()
-        if (confirmQuery.isSuccess) {
-            const response = confirmQuery.data as SignInResponse ?? null
-            if(response) {
-                setAuth(response.token)
-                setShow(false)
-            }
-        } else {
+        const url = BASE_API + "/auth/signin"
+        let callApi = axios.post(url, request);
+        callApi.then((response) => {
+            const token = response.data.token
+            setFetchedToken(token)
+            setAuth(token)
+            setShow(false)
+            reloadComponents()
+        }).catch((e) => {
+            console.log(e)
             setErrorMessage("Nieprawidłowy login lub hasło")
-        }
+        })
     }
 
     return <>
@@ -52,7 +53,10 @@ export function LoginPage(props: LoginPageProps) {
                         <Form.Label>Hasło</Form.Label>
                         <Form.Control type="password" onChange={(e) => setPassword(e.target.value)}/>
                     </Form.Group>
-                    <Button variant="primary" type="submit" onClick={handleConfirm}>
+                    <Button variant="primary" type="submit" onClick={(e)=> {
+                        e.preventDefault()
+                        handleConfirm()
+                    }}>
                         Zaloguj
                     </Button>
                 </Form>

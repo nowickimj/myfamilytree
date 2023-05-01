@@ -10,7 +10,7 @@ import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
 import {QueryClient} from "@tanstack/react-query";
 import {createSyncStoragePersister} from "@tanstack/query-sync-storage-persister";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {LoginPage} from "./components/login/LoginPage";
+import {LoginModal} from "./components/login/LoginModal";
 import {getAuth} from "./components/auth";
 
 const router = createBrowserRouter([
@@ -45,7 +45,7 @@ function App() {
     return <>
         <PersistQueryClientProvider client={queryClient} persistOptions={{persister}}>
             {
-                !token ? (<LoginPage/>) : (
+                !token ? (<LoginModal/>) : (
                     <div className="px-6 lg:px-20 xl:px-36 bg-dark-500">
                         <MainNavbar/>
                         <RouterProvider router={router}/>

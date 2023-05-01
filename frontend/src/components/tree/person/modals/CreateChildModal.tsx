@@ -5,6 +5,7 @@ import {Form} from "react-bootstrap";
 import ApiQueries, {CreateChildRequest, PersonRequest, FamilyDto} from "../../../../ApiQueries";
 import {useQuery} from "@tanstack/react-query";
 import {formatFamilyName} from "../../nodeUtils";
+import {reloadComponents} from "../../../../utlis";
 
 const personApi = new ApiQueries()
 const DEFAULT_GENDER = "female"
@@ -58,6 +59,7 @@ export function CreateChildModal(props: CreateChildModal) {
                 console.log("error caught")
             } else {
                 handleClose()
+                reloadComponents()
             }
         })
     }
