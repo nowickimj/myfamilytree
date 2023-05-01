@@ -11,7 +11,7 @@ import {QueryClient} from "@tanstack/react-query";
 import {createSyncStoragePersister} from "@tanstack/query-sync-storage-persister";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {LoginModal} from "./components/login/LoginModal";
-import {getAuth} from "./components/auth";
+import {getAuth} from "./auth";
 
 const router = createBrowserRouter([
     {

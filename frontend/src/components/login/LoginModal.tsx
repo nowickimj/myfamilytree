@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import React, {ChangeEvent, useState} from "react";
 import Modal from "react-bootstrap/Modal"
 import {BASE_API, SignInRequest} from "../../ApiQueries"
-import {getAuth, setAuth} from "../auth";
+import {getAuth, setAuth} from "../../auth";
 import axios from "axios";
 import {reloadComponents} from "../../utlis";
 

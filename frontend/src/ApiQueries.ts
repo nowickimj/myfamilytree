@@ -1,5 +1,5 @@
 import axios, {AxiosHeaders, AxiosRequestConfig} from "axios";
-import {getAuth} from "./components/auth";
+import {getAuth, getAuthHeader} from "./auth";
 import {NodeDto} from "./components/tree/const";
 
 export const BASE_API = "http://localhost:8080/api"
@@ -62,7 +62,7 @@ export default class ApiQueries {
     private defaultConfig(): AxiosRequestConfig {
         return {
             headers: {
-                "Authorization": getAuth()
+                "Authorization": getAuthHeader()
             }
         }
     }

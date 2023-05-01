@@ -1,7 +1,7 @@
 import logo from '../../assets/tree-logo-white.svg'
 import {Container, Nav, Navbar} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import {deleteAuth} from "../auth";
+import {deleteAuth} from "../../auth";
 
 export default function MainNavbar() {
 
