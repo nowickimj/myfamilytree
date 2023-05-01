@@ -13,7 +13,7 @@ repositories {
 	mavenCentral()
 }
 
-jib.to.image = "familia:latest"
+jib.to.image = "warchol-backend:latest"
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
@@ -22,7 +22,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation "javax.validation:validation-api:$validationApiVersion"
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocOpenapiVersion"
-//	implementation 'org.liquibase:liquibase-core'
 	implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
 	implementation "commons-io:commons-io:$commonsIoVersion"
 

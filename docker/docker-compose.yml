@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  familia-neo4j:
-    container_name: familia-neo4j
+  warchol-neo4j:
+    container_name: warchol-neo4j
     image: neo4j:5.5.0-community
     restart: always
     ports:
@@ -17,8 +17,8 @@ services:
     environment:
       NEO4J_AUTH: neo4j/mysupersecret
 
-  familia-mongo:
-    container_name: familia-mongo
+  warchol-mongo:
+    container_name: warchol-mongo
     image: mongo:6.0.5
     restart: always
     ports:
@@ -31,12 +31,12 @@ services:
       #- ./mongodb/data:/data/db
       - ./mongodb/init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
-  familia-mongo-express:
-    container_name: familia-mongo-express
+  warchol-mongo-express:
+    container_name: warchol-mongo-express
     image: mongo-express:latest
     restart: always
     depends_on:
-      - familia-mongo
+      - warchol-mongo
     ports:
       - 2701:8081
     environment:
@@ -46,8 +46,22 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: familia
       ME_CONFIG_MONGODB_ADMINPASSWORD: familia
 
-#  familia-backend:
-#    image: familia:latest
-#    restart: always
-#    ports:
-#      - 8080:8080
+  warchol-backend:
+    profiles:
+      [ 'prod' ]
+    container_name: warchol-backend
+    image: warchol-backend:latest
+    restart: always
+    ports:
+      - 8080:8080
+
+  warchol-frontend:
+    profiles:
+      ['prod']
+    container_name: warchol-frontend
+    image: warchol-frontend:latest
+#    build:
+#      context: ../frontend
+    restart: always
+    ports:
+      - 3000:80
