@@ -33,18 +33,25 @@ export const FamilyNode = React.memo(
         return (
             <div className={css.root} style={style}>
                 <div className={nodeClassNames} onClick={clickHandler}>
-                    <div className={classNames(css.nodeElement, css.nodeFullName)}>
-                        {formatName(node)}
+                    <div className={classNames(css.nodeElement, css.nodeTitle)}>
+                        {formatTitle(node)}
                     </div>
-                    <div className={classNames(css.nodeElement, css.nodeDates)}>
+                    <div className={classNames(css.nodeElement, css.nodeAvatar)}>
                         <ReactImageFallback
                             // TODO: load node's avatar
                             src={defaultAvatar}
                             fallbackImage={defaultAvatar}
                             height={70}
                          />
-                        {formatDates(node)}
                     </div>
+                    <div className={classNames(css.nodeElement, css.nodeDates)}>{formatNullableNodeDateProperty(node.dateOfBirth)}</div>
+                    {node.dateOfDeath && (
+                        <>
+                            <div className={classNames(css.nodeElement, css.nodeDates)}>-</div>
+                            <div className={classNames(css.nodeElement, css.nodeDates)}>{formatNullableNodeDateProperty(node.dateOfBirth)}</div>
+
+                        </>
+                    )}
                 </div>
                 <div className={css.nodeIcons}>
                     {hasSubTree && (
@@ -59,12 +66,10 @@ export const FamilyNode = React.memo(
     },
 );
 
-function formatName(node: NodeDto) {
-    return `${node.firstName ?? "?"} ${node.middleName ?? ""} ${node.lastName ?? "?"}`
-}
-
-function formatDates(node: NodeDto) {
-    let dateOfBirth = formatNullableNodeDateProperty(node.dateOfBirth);
-    let dateOfDeathSuffix = node.dateOfDeath ? (" - " + formatNullableNodeDateProperty(node.dateOfDeath)) : "";
-    return dateOfBirth + dateOfDeathSuffix
+function formatTitle(node: NodeDto) {
+    let formatted = `${node.firstName ?? "?"} ${node.lastName ?? "?"}`;
+    if(formatted.length > 35) {
+        formatted = formatted.substring(0, 32) + "..."
+    }
+    return formatted
 }

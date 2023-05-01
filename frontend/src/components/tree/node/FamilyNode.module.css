@@ -5,14 +5,24 @@
 }
 
 .node {
-  display: flex;
-  flex: 1;
+  display: block;
+  text-align: center;
   align-items: center;
   justify-content: center;
+  flex: 1;
   border: 2px solid rgba(0, 0, 0, .2);
   border-radius: 10px 10px;
   overflow: hidden;
   cursor: pointer;
+  padding: 10px 15px;
+}
+
+.node-element {
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .male {
@@ -20,15 +30,15 @@
 }
 
 .female {
-  background: #c90076;
+  background: #bb4e83;
 }
 
 .male.deceased {
-  background: #6fa8dc;
+  background: #91b9d9;
 }
 
 .female.deceased {
-  background: #d5a6bd;
+  background: #d0b5c0;
 }
 
 .isRoot {
@@ -39,16 +49,22 @@
   border-color: rgba(0, 0, 0, .8);
 }
 
-.nodeFullName {
+.nodeTitle {
   font-weight: bold;
   font-size: 14px;
   line-height: 1;
   opacity: .5;
+  padding-bottom: 5px;
+}
+
+.nodeAvatar {
+  padding-bottom: 5px;
 }
 
 .nodeDates {
-  font-size: 13px;
-  line-height: 1;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 0.75;
   opacity: .5;
 }
 
