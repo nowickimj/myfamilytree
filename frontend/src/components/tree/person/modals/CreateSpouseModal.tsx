@@ -106,7 +106,7 @@ export function CreateSpouseModal(props: CreateSpouseModalProps) {
                         <Form.Label>Nazwisko*</Form.Label>
                         <Form.Control type="text" onChange={(e) => setLastName(e.target.value)}/>
 
-                        <Form.Label>Nazwisko panieńskie</Form.Label>
+                        <Form.Label>Nazwisko rodowe</Form.Label>
                         <Form.Control type="text" onChange={(e) => setMaidenName(e.target.value)}/>
 
                         <Form.Label>Data urodzenia</Form.Label>

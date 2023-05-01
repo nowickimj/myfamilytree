@@ -75,7 +75,7 @@ export function UpdatePersonModal(props: UpdatePersonModalProps) {
                         <Form.Label>Nazwisko*</Form.Label>
                         <Form.Control type="text" onChange={(e) => setLastName(e.target.value)} defaultValue={lastName}/>
 
-                        <Form.Label>Nazwisko panieńskie</Form.Label>
+                        <Form.Label>Nazwisko rodowe</Form.Label>
                         <Form.Control type="text" onChange={(e) => setMaidenName(e.target.value)} defaultValue={maidenName ?? undefined}/>
 
                         <Form.Label>Data urodzenia</Form.Label>
