@@ -35,10 +35,9 @@ public class JwtTokenProvider {
         key = new SecretKeySpec(base64EncodedSecretKey.getBytes(), SIGNATURE_ALGORITHM.getJcaName());
     }
 
-    public String createToken(String email, Collection<? extends GrantedAuthority> roles, String firstName) {
+    public String createToken(String email, Collection<? extends GrantedAuthority> roles) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put(ROLES_KEY, roles);
-        claims.put(FIRST_NAME_KEY, firstName);
         Date now = new Date();
         int tokenExpirationInSeconds = jwtConfig.getTokenExpiration();
         Date validity = new Date(now.getTime() + tokenExpirationInSeconds * 1000L);

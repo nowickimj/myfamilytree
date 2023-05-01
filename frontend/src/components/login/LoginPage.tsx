@@ -2,9 +2,9 @@ import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import React, {useState} from "react";
 import Modal from "react-bootstrap/Modal"
-import ApiQueries, {SignInRequest} from "../../ApiQueries"
-import {useQuery} from "@tanstack/react-query"
-import axios from "axios";
+import ApiQueries, {SignInRequest, SignInResponse} from "../../ApiQueries"
+import {setAuth} from "../auth";
+import {useQuery} from "@tanstack/react-query";
 
 const api = new ApiQueries()
 
@@ -27,10 +27,11 @@ export function LoginPage(props: LoginPageProps) {
     const handleConfirm = () => {
         confirmQuery.refetch()
         if (confirmQuery.isSuccess) {
-            const token = confirmQuery.data.token
-            localStorage.setItem("jwtToken", token)
-            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-            setShow(false)
+            const response = confirmQuery.data as SignInResponse ?? null
+            if(response) {
+                setAuth(response.token)
+                setShow(false)
+            }
         } else {
             setErrorMessage("Nieprawidłowy login lub hasło")
         }

@@ -1,4 +1,6 @@
-import axios from "axios";
+import axios, {AxiosHeaders, AxiosRequestConfig} from "axios";
+import {getAuth} from "./components/auth";
+import {NodeDto} from "./components/tree/const";
 
 const BASE_API = "http://localhost:8080/api"
 
@@ -10,6 +12,11 @@ export interface SignInRequest {
 export interface SignInResponse {
     token: string,
     refreshToken: string
+}
+
+export interface GetTreeResponse {
+    nodes: NodeDto[],
+    rootId: string
 }
 
 export interface PersonDto {
@@ -52,18 +59,26 @@ export interface CreateSpouseRequest extends PersonRequest {
 
 export default class ApiQueries {
 
-    public signIn(request: SignInRequest) {
+    private defaultConfig(): AxiosRequestConfig {
+        return {
+            headers: {
+                "Authorization": getAuth()
+            }
+        }
+    }
+
+    public async signIn(request: SignInRequest) {
         return {
             queryKey: ["signIn"],
             queryFn: async (): Promise<SignInResponse> => {
-                const {data} = await axios.post(
-                    BASE_API + "/auth/signin",
-                    request
-                );
-                return data;
+                const url = BASE_API + "/auth/signin"
+                const {data} = await axios.post(url, request)
+                return data
             },
             options: {
-                manual: true
+                cacheTime: 0,
+                manual: true,
+                enabled: false
             }
         }
     }
@@ -72,10 +87,9 @@ export default class ApiQueries {
         return {
             queryKey: ["getNodeDetails", nodeId],
             queryFn: async (): Promise<PersonDto> => {
-                const {data} = await axios.get(
-                    BASE_API + "/persons/" + nodeId
-                );
-                return data;
+                const url = BASE_API + "/persons/" + nodeId
+                const {data} = await axios.get(url, this.defaultConfig())
+                return data
             }
         }
     }
@@ -84,11 +98,9 @@ export default class ApiQueries {
         return {
             queryKey: ["updatePerson", nodeId],
             queryFn: async (): Promise<PersonDto> => {
-                const {data} = await axios.patch(
-                    BASE_API + "/persons/" + nodeId,
-                    request
-                );
-                return data;
+                const url = BASE_API + "/persons/" + nodeId
+                const {data} = await axios.patch(url, request, this.defaultConfig())
+                return data
             },
             options: {
                 manual: true
@@ -100,10 +112,9 @@ export default class ApiQueries {
         return {
             queryKey: ["deletePerson", nodeId],
             queryFn: async (): Promise<boolean> => {
-                await axios.delete(
-                    BASE_API + "/persons/" + nodeId
-                );
-                return true;
+                const url = BASE_API + "/persons/" + nodeId
+                await axios.delete(url, this.defaultConfig())
+                return true
             },
             options: {
                 manual: true
@@ -115,11 +126,9 @@ export default class ApiQueries {
         return {
             queryKey: ["createChild", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
-                const {data} = await axios.post(
-                    BASE_API + "/persons/" + nodeId + "/children",
-                    request
-                );
-                return data;
+                const url = BASE_API + "/persons/" + nodeId + "/children"
+                const {data} = await axios.post(url, request, this.defaultConfig())
+                return data
             },
             options: {
                 manual: true
@@ -131,10 +140,8 @@ export default class ApiQueries {
         return {
             queryKey: ["createParent", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
-                const {data} = await axios.post(
-                    BASE_API + "/persons/" + nodeId + "/parents",
-                    request
-                );
+                let url = BASE_API + "/persons/" + nodeId + "/parents"
+                const {data} = await axios.post(url, request, this.defaultConfig())
                 return data;
             },
             options: {
@@ -147,11 +154,9 @@ export default class ApiQueries {
         return {
             queryKey: ["createSpouse", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
-                const {data} = await axios.post(
-                    BASE_API + "/persons/" + nodeId + "/spouses",
-                    request
-                );
-                return data;
+                const url = BASE_API + "/persons/" + nodeId + "/spouses";
+                const {data} = await axios.post(url, request, this.defaultConfig());
+                return data
             },
             options: {
                 manual: true
@@ -163,13 +168,23 @@ export default class ApiQueries {
         return {
             queryKey: ["getDescendingFamilies", nodeId],
             queryFn: async (): Promise<FamilyDto[]> => {
-                const {data} = await axios.get(
-                    BASE_API + "/persons/" + nodeId + "/families/descending"
-                );
+                const url = BASE_API + "/persons/" + nodeId + "/families/descending";
+                const {data} = await axios.get(url, this.defaultConfig());
                 return data;
             },
             options: {
                 manual: true
+            }
+        }
+    }
+
+    public getTree() {
+        return {
+            queryKey: ["getTree"],
+            queryFn: async (): Promise<GetTreeResponse> => {
+                let url = BASE_API + "/tree";
+                const {data} = await axios.get(url, this.defaultConfig());
+                return data;
             }
         }
     }

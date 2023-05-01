@@ -41,7 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             JwtTokenInfo tokenInfo = jwtTokenProvider.parseToken(token);
             Authentication authentication = new UsernamePasswordAuthenticationToken(tokenInfo.email(), tokenInfo.email(), tokenInfo.roles());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            filterChain.doFilter(request, response);
+
 
         } catch (ExpiredJwtException e) {
             String requestedUri = request.getRequestURI();
@@ -60,6 +60,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("Error occurred while parsing token or authenticating", e);
         }
+
+        filterChain.doFilter(request, response);
     }
 
 }

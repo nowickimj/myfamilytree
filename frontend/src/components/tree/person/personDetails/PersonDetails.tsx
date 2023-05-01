@@ -34,7 +34,6 @@ export const PersonDetails = memo(
             props.onSelect(undefined)
         }, [props]);
 
-
         const {data} = useQuery(personApi.getPerson(nodeId))
         const properties = getPersonProperties(data)
 
@@ -44,7 +43,6 @@ export const PersonDetails = memo(
         const [isAddChildModalShown, setShowAddChildModal] = useState(false)
         const [isAddParentModalShown, setShowAddParentModal] = useState(false)
         const [isAddSpouseModalShown, setShowAddSpouseModal] = useState(false)
-
 
         const handleUpdatePerson: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowUpdatePersonModal(isUpdatePersonModalShown => !isUpdatePersonModalShown)
@@ -61,7 +59,6 @@ export const PersonDetails = memo(
         const handleAddSpouse: MouseEventHandler<HTMLButtonElement> = (event) => {
             setShowAddSpouseModal(isAddSpouseModalShown => !isAddSpouseModalShown)
         }
-
 
         if (!data) {
             return <Spinner animation="border" variant="light"/>

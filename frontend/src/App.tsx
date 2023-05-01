@@ -10,8 +10,8 @@ import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
 import {QueryClient} from "@tanstack/react-query";
 import {createSyncStoragePersister} from "@tanstack/query-sync-storage-persister";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {LoginPage} from "./components/login/loginPage";
-import {setToken} from "./components/axiosUtils";
+import {LoginPage} from "./components/login/LoginPage";
+import {getAuth} from "./components/auth";
 
 const router = createBrowserRouter([
     {
@@ -40,21 +40,17 @@ function App() {
         AOS.init();
     }, []);
 
-    const token = localStorage.getItem("jwtToken")
-    if(token) {
-        setToken(token)
-    }
+    const token = getAuth()
 
     return <>
         <PersistQueryClientProvider client={queryClient} persistOptions={{persister}}>
-
             {
-                token ? (<div className="px-6 lg:px-20 xl:px-36 bg-dark-500">
-                    <MainNavbar/>
-                    <RouterProvider router={router}/>
-                </div>) : (<LoginPage/>)
+                !token ? (<LoginPage/>) : (
+                    <div className="px-6 lg:px-20 xl:px-36 bg-dark-500">
+                        <MainNavbar/>
+                        <RouterProvider router={router}/>
+                    </div>)
             }
-
         </PersistQueryClientProvider>
     </>
 }

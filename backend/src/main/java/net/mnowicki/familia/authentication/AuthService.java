@@ -36,7 +36,7 @@ public class AuthService {
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         var user = userService.loadUserByUsername(loginRequest.email());
-        var accessToken = jwtTokenProvider.createToken(authentication.getName(), authentication.getAuthorities(), user.getEmail());
+        var accessToken = jwtTokenProvider.createToken(authentication.getName(), authentication.getAuthorities());
         var refreshToken = tokenRefreshService.createOrUpdateRefreshToken(user);
 
         return new SignInResponseDto(accessToken, refreshToken);
@@ -47,7 +47,7 @@ public class AuthService {
         var user = userService.loadUserByUsername(authentication.getName());
         log.debug("Refreshing JWT access token for user [{}]", user.getEmail());
         tokenRefreshService.refreshToken(user, token);
-        var accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getAuthorities(), user.getEmail());
+        var accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getAuthorities());
 
         return new SignInResponseDto(accessToken, token);
     }
