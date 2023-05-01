@@ -93,7 +93,7 @@ export function UpdatePersonModal(props: UpdatePersonModalProps) {
                     <Button variant="secondary" onClick={handleClose}>
                         Anuluj
                     </Button>
-                    <Button variant="primary" disabled={!(firstName && lastName && gender)} onClick={(e) => {
+                    <Button variant="primary" disabled={!(firstName && gender)} onClick={(e) => {
                         handleConfirm()
                     }}>
                         Zapisz

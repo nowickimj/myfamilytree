@@ -79,7 +79,7 @@ export const PersonDetails = memo(
                                         </button>
                                         <Dropdown>
                                             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                                Operacje
+                                                Opcje
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu>
                                                 <Dropdown.Item>

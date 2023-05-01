@@ -134,9 +134,8 @@ export function CreateChildModal(props: CreateChildModal) {
                     <Button variant="secondary" onClick={handleClose}>
                         Anuluj
                     </Button>
-                    <Button variant="primary" disabled={!(firstName && lastName && gender)} onClick={(e) => {
+                    <Button variant="primary" disabled={!(firstName && gender)} onClick={(e) => {
                         handleConfirm()
-                        //console.log(JSON.stringify(addChildRequest))
                     }}>
                         Zapisz
                     </Button>

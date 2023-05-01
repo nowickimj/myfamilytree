@@ -14,12 +14,15 @@ const DEFAULT_ROOT_ID = "0"
 const api = new ApiQueries()
 
 export default function Tree() {
-    const {data} = useQuery(api.getTree())
+    const {data, status} = useQuery(api.getTree())
 
     const nodes: NodeDto[] = data?.nodes ?? []
     const [rootId, setRootId] = React.useState(data?.rootId ?? DEFAULT_ROOT_ID)
     const [selectedNode, setSelectedNode] = useState<NodeDto>()
 
+    if(status === "error") {
+        return <p>Wystąpił błąd połączenia z serwerem.</p>
+    }
     if (nodes.length == 0) {
         return <Spinner animation="border" variant="light"/>
     }

@@ -8,7 +8,7 @@ import org.springframework.lang.NonNull;
 import java.time.LocalDate;
 
 @Builder
-public record CreatePersonDto(@NotBlank String firstName, String middleName, @NotBlank String lastName,
+public record CreatePersonDto(@NotBlank String firstName, String middleName, String lastName,
                               String maidenName, LocalDate dateOfBirth, LocalDate dateOfDeath,
                               @NonNull Gender gender, String description) implements IPersonDto {
 }
