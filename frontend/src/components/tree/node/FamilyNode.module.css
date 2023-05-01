@@ -16,19 +16,19 @@
 }
 
 .male {
-  background: #6fa8dc;
-}
-
-.female {
-  background: #d5a6bd;
-}
-
-.male.deceased {
   background: #2986cc;
 }
 
-.female.deceased {
+.female {
   background: #c90076;
+}
+
+.male.deceased {
+  background: #6fa8dc;
+}
+
+.female.deceased {
+  background: #d5a6bd;
 }
 
 .isRoot {
