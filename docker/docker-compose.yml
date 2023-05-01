@@ -79,7 +79,5 @@ services:
     restart: always
     ports:
       - 3000:80
-    environment:
-      - API_URL=https://warchol.mnowicki.net/api
     networks:
       - warchol

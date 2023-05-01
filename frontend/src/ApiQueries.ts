@@ -1,11 +1,11 @@
-import axios, {AxiosHeaders, AxiosRequestConfig} from "axios";
-import {getAuth, getAuthHeader} from "./auth";
+import axios, {AxiosRequestConfig} from "axios";
+import {getAuthHeader} from "./auth";
 import {NodeDto} from "./components/tree/const";
 
 const DEFAULT_BASE_API = "http://localhost:8080/api"
 
 export function baseApi(): string {
-    let value = process.env.API_URL;
+    let value = process.env.REACT_APP_API_URL;
     if(!value) {
         console.log(`API_URL not defined, using default: ${DEFAULT_BASE_API}`)
         return DEFAULT_BASE_API
