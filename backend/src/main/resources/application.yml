@@ -34,5 +34,5 @@ security:
     jwt:
         secretKey: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4MjgwMjY5NiwiaWF0IjoxNjgyODAyNjk2fQ.-y4PMPjhvmqksszs7QGKcyr2w8yy_rdqfIrYhwHfA0Q
         tokenPrefix: "Bearer "
-        tokenExpiration: 3600
-        refreshTokenExpiration: 43200 #12 hours
+        tokenExpiration: 604800 #one week
+        refreshTokenExpiration: 0

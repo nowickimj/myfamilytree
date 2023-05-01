@@ -4,6 +4,7 @@ interface JwtToken {
 }
 
 const itemName = "jwt"
+const expirationTime = 604800 //one week
 
 export function getAuth(): string | null {
     const tokenJson = localStorage.getItem(itemName)
@@ -25,7 +26,7 @@ export function getAuthHeader(): string | null {
 
 export function setAuth(token: string) {
     const expiresOn = new Date()
-    expiresOn.setTime(expiresOn.getTime() + 60 * 60 * 1000)
+    expiresOn.setTime(expiresOn.getTime() + expirationTime)
     const jwt: JwtToken = {
         token: token,
         expiresOn: expiresOn
