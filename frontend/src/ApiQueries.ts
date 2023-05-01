@@ -2,7 +2,16 @@ import axios, {AxiosHeaders, AxiosRequestConfig} from "axios";
 import {getAuth, getAuthHeader} from "./auth";
 import {NodeDto} from "./components/tree/const";
 
-export const BASE_API = "http://localhost:8080/api"
+const DEFAULT_BASE_API = "http://localhost:8080/api"
+
+export function baseApi(): string {
+    let value = process.env.API_URL;
+    if(!value) {
+        console.log(`API_URL not defined, using default: ${DEFAULT_BASE_API}`)
+        return DEFAULT_BASE_API
+    }
+    return value
+}
 
 export interface SignInRequest {
     email: string,
@@ -71,7 +80,7 @@ export default class ApiQueries {
         return {
             queryKey: ["signIn"],
             queryFn: async (): Promise<SignInResponse> => {
-                const url = BASE_API + "/auth/signin"
+                const url = baseApi() + "/auth/signin"
                 const {data} = await axios.post(url, request)
                 return data
             },
@@ -87,7 +96,7 @@ export default class ApiQueries {
         return {
             queryKey: ["getNodeDetails", nodeId],
             queryFn: async (): Promise<PersonDto> => {
-                const url = BASE_API + "/persons/" + nodeId
+                const url = baseApi() + "/persons/" + nodeId
                 const {data} = await axios.get(url, this.defaultConfig())
                 return data
             }
@@ -98,7 +107,7 @@ export default class ApiQueries {
         return {
             queryKey: ["updatePerson", nodeId],
             queryFn: async (): Promise<PersonDto> => {
-                const url = BASE_API + "/persons/" + nodeId
+                const url = baseApi() + "/persons/" + nodeId
                 const {data} = await axios.patch(url, request, this.defaultConfig())
                 return data
             },
@@ -112,7 +121,7 @@ export default class ApiQueries {
         return {
             queryKey: ["deletePerson", nodeId],
             queryFn: async (): Promise<boolean> => {
-                const url = BASE_API + "/persons/" + nodeId
+                const url = baseApi() + "/persons/" + nodeId
                 await axios.delete(url, this.defaultConfig())
                 return true
             },
@@ -126,7 +135,7 @@ export default class ApiQueries {
         return {
             queryKey: ["createChild", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
-                const url = BASE_API + "/persons/" + nodeId + "/children"
+                const url = baseApi() + "/persons/" + nodeId + "/children"
                 const {data} = await axios.post(url, request, this.defaultConfig())
                 return data
             },
@@ -140,7 +149,7 @@ export default class ApiQueries {
         return {
             queryKey: ["createParent", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
-                let url = BASE_API + "/persons/" + nodeId + "/parents"
+                let url = baseApi() + "/persons/" + nodeId + "/parents"
                 const {data} = await axios.post(url, request, this.defaultConfig())
                 return data;
             },
@@ -154,7 +163,7 @@ export default class ApiQueries {
         return {
             queryKey: ["createSpouse", nodeId],
             queryFn: async (): Promise<FamilyDto> => {
-                const url = BASE_API + "/persons/" + nodeId + "/spouses";
+                const url = baseApi() + "/persons/" + nodeId + "/spouses";
                 const {data} = await axios.post(url, request, this.defaultConfig());
                 return data
             },
@@ -168,7 +177,7 @@ export default class ApiQueries {
         return {
             queryKey: ["getDescendingFamilies", nodeId],
             queryFn: async (): Promise<FamilyDto[]> => {
-                const url = BASE_API + "/persons/" + nodeId + "/families/descending";
+                const url = baseApi() + "/persons/" + nodeId + "/families/descending";
                 const {data} = await axios.get(url, this.defaultConfig());
                 return data;
             },
@@ -182,7 +191,7 @@ export default class ApiQueries {
         return {
             queryKey: ["getTree"],
             queryFn: async (): Promise<GetTreeResponse> => {
-                let url = BASE_API + "/tree";
+                let url = baseApi() + "/tree";
                 const {data} = await axios.get(url, this.defaultConfig());
                 return data;
             }

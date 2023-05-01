@@ -1,5 +1,9 @@
 version: "3.8"
 
+networks:
+  warchol:
+    driver: bridge
+
 services:
   warchol-neo4j:
     container_name: warchol-neo4j
@@ -16,6 +20,8 @@ services:
 #      - ./neo4j/plugins:/plugins
     environment:
       NEO4J_AUTH: neo4j/mysupersecret
+    networks:
+      - warchol
 
   warchol-mongo:
     container_name: warchol-mongo
@@ -30,6 +36,8 @@ services:
     volumes:
       #- ./mongodb/data:/data/db
       - ./mongodb/init/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - warchol
 
   warchol-mongo-express:
     container_name: warchol-mongo-express
@@ -40,24 +48,30 @@ services:
     ports:
       - 2701:8081
     environment:
-      ME_CONFIG_MONGODB_SERVER: familia-mongo
+      ME_CONFIG_MONGODB_SERVER: warchol-mongo
       ME_CONFIG_BASICAUTH_USERNAME: express-admin
       ME_CONFIG_BASICAUTH_PASSWORD: SuperSecret123!
       ME_CONFIG_MONGODB_ADMINUSERNAME: familia
       ME_CONFIG_MONGODB_ADMINPASSWORD: familia
+    networks:
+      - warchol
 
   warchol-backend:
     profiles:
-      [ 'prod' ]
+      - prod
     container_name: warchol-backend
     image: warchol-backend:latest
     restart: always
     ports:
       - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - warchol
 
   warchol-frontend:
     profiles:
-      ['prod']
+      - prod
     container_name: warchol-frontend
     image: warchol-frontend:latest
 #    build:
@@ -65,3 +79,7 @@ services:
     restart: always
     ports:
       - 3000:80
+    environment:
+      - API_URL=https://warchol.mnowicki.net/api
+    networks:
+      - warchol

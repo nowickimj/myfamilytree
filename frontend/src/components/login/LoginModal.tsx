@@ -2,7 +2,7 @@ import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import React, {ChangeEvent, useState} from "react";
 import Modal from "react-bootstrap/Modal"
-import {BASE_API, SignInRequest} from "../../ApiQueries"
+import {baseApi, SignInRequest} from "../../ApiQueries"
 import {getAuth, setAuth} from "../../auth";
 import axios from "axios";
 import {reloadComponents} from "../../utlis";
@@ -24,7 +24,7 @@ export function LoginModal(props: LoginPageProps) {
     }
 
     const handleConfirm = () => {
-        const url = BASE_API + "/auth/signin"
+        const url = baseApi() + "/auth/signin"
         let callApi = axios.post(url, request);
         callApi.then((response) => {
             const token = response.data.token
