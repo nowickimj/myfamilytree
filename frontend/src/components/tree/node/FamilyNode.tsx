@@ -48,8 +48,7 @@ export const FamilyNode = React.memo(
                     {node.dateOfDeath && (
                         <>
                             <div className={classNames(css.nodeElement, css.nodeDates)}>-</div>
-                            <div className={classNames(css.nodeElement, css.nodeDates)}>{formatNullableNodeDateProperty(node.dateOfBirth)}</div>
-
+                            <div className={classNames(css.nodeElement, css.nodeDates)}>{formatNullableNodeDateProperty(node.dateOfDeath)}</div>
                         </>
                     )}
                 </div>
