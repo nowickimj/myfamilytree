@@ -1,7 +1,7 @@
 import logo from '../../assets/tree-logo-white.svg'
 import {Container, Nav, Navbar} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import {deleteAuth} from "../../auth";
+import {deleteAuth, getAuthUsername} from "../../auth";
 
 export default function MainNavbar() {
 
@@ -11,10 +11,9 @@ export default function MainNavbar() {
     }
 
     return (
-        <Navbar bg="dark" variant="dark" sticky={"top"}>
-            <Container>
+        <Navbar bg="dark" variant="dark" sticky={"top"} expand="lg">
                 <Navbar.Brand>
-                    <img src={logo} className="App-logo w-10 rounded-full" alt="logo" />
+                    <img src={logo} width="30" height="30" className="d-inline-block align-top" alt="logo" />{' '}
                     Ród Warchołów
                 </Navbar.Brand>
                 <Nav className="me-auto">
@@ -23,9 +22,11 @@ export default function MainNavbar() {
                 </Nav>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
-                    <Button variant="secondary" onClick={handleLogout}>Wyloguj</Button>
+                    <Nav>
+                        <Nav.Link disabled className="text-light bg-dark">Zalogowany jako: {getAuthUsername()}</Nav.Link>
+                        <Nav.Link onClick={handleLogout} className="btn btn-outline-light">Wyloguj</Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
-            </Container>
         </Navbar>
     )
 }

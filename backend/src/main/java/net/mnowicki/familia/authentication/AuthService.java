@@ -39,7 +39,7 @@ public class AuthService {
         var accessToken = jwtTokenProvider.createToken(authentication.getName(), authentication.getAuthorities());
         var refreshToken = tokenRefreshService.createOrUpdateRefreshToken(user);
 
-        return new SignInResponseDto(accessToken, refreshToken);
+        return new SignInResponseDto(accessToken, refreshToken, loginRequest.email());
     }
 
     public SignInResponseDto refreshToken(UUID token) {
@@ -49,7 +49,7 @@ public class AuthService {
         tokenRefreshService.refreshToken(user, token);
         var accessToken = jwtTokenProvider.createToken(user.getEmail(), user.getAuthorities());
 
-        return new SignInResponseDto(accessToken, token);
+        return new SignInResponseDto(accessToken, token, authentication.getName());
     }
 
 }

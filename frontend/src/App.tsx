@@ -11,7 +11,7 @@ import {QueryClient} from "@tanstack/react-query";
 import {createSyncStoragePersister} from "@tanstack/query-sync-storage-persister";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {LoginModal} from "./components/login/LoginModal";
-import {getAuth} from "./auth";
+import {getAuthToken} from "./auth";
 
 const router = createBrowserRouter([
     {
@@ -40,7 +40,7 @@ function App() {
         AOS.init();
     }, []);
 
-    const token = getAuth()
+    const token = getAuthToken()
 
     return <>
         <PersistQueryClientProvider client={queryClient} persistOptions={{persister}}>

@@ -1,39 +1,51 @@
-interface JwtToken {
+interface Auth {
     token: string,
-    expiresOn: Date
+    expiresOn: Date,
+    username: string
 }
 
-const itemName = "jwt"
-const expirationTime = 604800 //one week
+const ITEM_NAME = "auth"
+const EXPIRATION_TIME = 604800 //one week
 
-export function getAuth(): string | null {
-    const tokenJson = localStorage.getItem(itemName)
-    if(!tokenJson) {
+export function getAuth(): Auth | null {
+    const authJson = localStorage.getItem(ITEM_NAME)
+    if(!authJson) {
         return null
     }
-    const parsedToken: JwtToken = JSON.parse(tokenJson);
-    if(new Date() > parsedToken.expiresOn) {
+    const parsed: Auth = JSON.parse(authJson);
+    if(new Date() > parsed.expiresOn) {
         deleteAuth()
-        return null;
+        return null
     }
-    return parsedToken.token;
+    return parsed
+}
+
+export function getAuthUsername(): string | null {
+    const auth = getAuth()
+    return auth ? auth.username : null
+}
+
+export function getAuthToken(): string | null {
+    const auth = getAuth()
+    return auth ? auth.token : null
 }
 
 export function getAuthHeader(): string | null {
-    const token = getAuth()
+    const token = getAuthToken()
     return token ? `Bearer ${token}` : null
 }
 
-export function setAuth(token: string) {
+export function setAuth(token: string, username: string) {
     const expiresOn = new Date()
-    expiresOn.setTime(expiresOn.getTime() + expirationTime)
-    const jwt: JwtToken = {
+    expiresOn.setTime(expiresOn.getTime() + EXPIRATION_TIME)
+    const jwt: Auth = {
         token: token,
+        username: username,
         expiresOn: expiresOn
     }
-    localStorage.setItem(itemName, JSON.stringify(jwt))
+    localStorage.setItem(ITEM_NAME, JSON.stringify(jwt))
 }
 
 export function deleteAuth() {
-    localStorage.removeItem(itemName)
+    localStorage.removeItem(ITEM_NAME)
 }

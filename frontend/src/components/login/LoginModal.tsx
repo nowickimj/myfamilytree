@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import React, {ChangeEvent, useState} from "react";
 import Modal from "react-bootstrap/Modal"
 import {baseApi, SignInRequest} from "../../ApiQueries"
-import {getAuth, setAuth} from "../../auth";
+import {getAuthToken, setAuth} from "../../auth";
 import axios from "axios";
 import {reloadComponents} from "../../utlis";
 
@@ -16,7 +16,7 @@ export function LoginModal(props: LoginPageProps) {
     const [show, setShow] = useState(!(!!fetchedToken))
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [errorMessage, setErrorMessage] = useState<string | null>(getAuth)
+    const [errorMessage, setErrorMessage] = useState<string | null>(getAuthToken)
 
     const request: SignInRequest = {
         email: email,
@@ -28,8 +28,9 @@ export function LoginModal(props: LoginPageProps) {
         let callApi = axios.post(url, request);
         callApi.then((response) => {
             const token = response.data.token
+            const username = response.data.username
             setFetchedToken(token)
-            setAuth(token)
+            setAuth(token, username)
             setShow(false)
             reloadComponents()
         }).catch((e) => {

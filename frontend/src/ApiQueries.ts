@@ -20,7 +20,8 @@ export interface SignInRequest {
 
 export interface SignInResponse {
     token: string,
-    refreshToken: string
+    refreshToken: string,
+    username: string
 }
 
 export interface GetTreeResponse {
