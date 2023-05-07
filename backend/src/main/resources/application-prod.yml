@@ -28,7 +28,7 @@ springdoc:
         path: /swagger.html
 
 cors:
-    allowed-origins: https://warchol.mnowicki.net
+    allowed-origins: http://warchol.mnowicki.net
 
 security:
     jwt:
