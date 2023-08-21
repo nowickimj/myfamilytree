@@ -1,3 +1,4 @@
+#TODO: Externalise configuration for test and prod
 server:
     port: 8080
     servlet:
@@ -32,6 +33,7 @@ cors:
 
 security:
     jwt:
+        #TODO: update secretKey
         secretKey: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4MjgwMjY5NiwiaWF0IjoxNjgyODAyNjk2fQ.-y4PMPjhvmqksszs7QGKcyr2w8yy_rdqfIrYhwHfA0Q
         tokenPrefix: "Bearer "
         tokenExpiration: 604800 #one week

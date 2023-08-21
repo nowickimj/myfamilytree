@@ -1,3 +1,4 @@
+#TODO: move common configuration to application.yml, leave only local parameters here
 server:
     port: 8080
     servlet:
